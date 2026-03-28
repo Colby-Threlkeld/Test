@@ -1,4 +1,6 @@
-export { default } from "next-auth/middleware";
+import { withAuth } from "next-auth/middleware";
+
+export default withAuth;
 
 export const config = {
   // Protect all routes under (main). Auth routes are public.
