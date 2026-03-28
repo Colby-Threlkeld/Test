@@ -1,0 +1,152 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Bell, Check, MessageCircle, Users, Calendar, Heart, Settings } from "lucide-react";
+import { useNotifications } from "@/hooks/useNotifications";
+import { Avatar } from "@/components/ui/Avatar";
+import { Button } from "@/components/ui/Button";
+import { cn, formatRelativeTime } from "@/lib/utils";
+import type { AppNotification, NotificationType } from "@/types/domain";
+
+const typeIcon: Record<NotificationType, React.ReactNode> = {
+  message: <MessageCircle className="h-3.5 w-3.5" />,
+  community_activity: <Users className="h-3.5 w-3.5" />,
+  event_reminder: <Calendar className="h-3.5 w-3.5" />,
+  planning_update: <Calendar className="h-3.5 w-3.5" />,
+  social_interaction: <Heart className="h-3.5 w-3.5" />,
+  system: <Settings className="h-3.5 w-3.5" />,
+};
+
+const typeColor: Record<NotificationType, string> = {
+  message: "bg-blue-100 text-blue-600",
+  community_activity: "bg-violet-100 text-violet-600",
+  event_reminder: "bg-amber-100 text-amber-600",
+  planning_update: "bg-emerald-100 text-emerald-600",
+  social_interaction: "bg-pink-100 text-pink-600",
+  system: "bg-slate-100 text-slate-600",
+};
+
+function NotificationItem({ notification }: { notification: AppNotification }) {
+  const router = useRouter();
+  const { markRead } = useNotifications();
+
+  function handleClick() {
+    markRead(notification.id);
+    if (notification.linkTo) router.push(notification.linkTo);
+  }
+
+  return (
+    <button
+      onClick={handleClick}
+      className={cn(
+        "flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50",
+        !notification.isRead && "bg-brand-50/50"
+      )}
+    >
+      <div className="relative mt-0.5 shrink-0">
+        <Avatar
+          src={notification.actorAvatarUrl}
+          name={notification.title}
+          size="sm"
+        />
+        <span
+          className={cn(
+            "absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full",
+            typeColor[notification.type]
+          )}
+        >
+          {typeIcon[notification.type]}
+        </span>
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className={cn("text-sm leading-snug", !notification.isRead ? "font-semibold text-slate-900" : "font-medium text-slate-700")}>
+          {notification.title}
+        </p>
+        <p className="mt-0.5 truncate text-xs text-slate-500">{notification.body}</p>
+        <p className="mt-1 text-xs text-slate-400">{formatRelativeTime(notification.createdAt)}</p>
+      </div>
+
+      {!notification.isRead && (
+        <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-500" />
+      )}
+    </button>
+  );
+}
+
+export function NotificationsDropdown() {
+  const { notifications, unreadCount, isOpen, toggleNotifications, closeNotifications, markAllRead } =
+    useNotifications();
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    function onPointerDown(e: PointerEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        closeNotifications();
+      }
+    }
+    if (isOpen) document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [isOpen, closeNotifications]);
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Bell button */}
+      <button
+        onClick={toggleNotifications}
+        aria-label="Notifications"
+        className={cn(
+          "relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors",
+          isOpen ? "bg-brand-50 text-brand-600" : "text-slate-500 hover:bg-slate-100"
+        )}
+      >
+        <Bell className="h-5 w-5" />
+        {unreadCount > 0 && (
+          <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-500 px-1 text-[10px] font-bold text-white leading-none">
+            {unreadCount > 9 ? "9+" : unreadCount}
+          </span>
+        )}
+      </button>
+
+      {/* Dropdown panel */}
+      {isOpen && (
+        <div className="absolute right-0 top-11 z-50 w-80 overflow-hidden rounded-xl border border-slate-100 bg-white shadow-dropdown sm:w-96">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+            <h3 className="text-sm font-semibold text-slate-900">Notifications</h3>
+            {unreadCount > 0 && (
+              <button
+                onClick={markAllRead}
+                className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+              >
+                <Check className="h-3 w-3" />
+                Mark all read
+              </button>
+            )}
+          </div>
+
+          {/* Items */}
+          <div className="max-h-96 overflow-y-auto divide-y divide-slate-50">
+            {notifications.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <Bell className="h-8 w-8 text-slate-300" />
+                <p className="mt-2 text-sm text-slate-500">You're all caught up</p>
+              </div>
+            ) : (
+              notifications.map((n) => <NotificationItem key={n.id} notification={n} />)
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="border-t border-slate-100 px-4 py-2">
+            <Button variant="ghost" size="sm" className="w-full text-xs text-slate-500">
+              View all notifications
+            </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
