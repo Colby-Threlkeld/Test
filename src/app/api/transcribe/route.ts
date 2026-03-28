@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
     // No language hint — let Whisper auto-detect
   });
 
-  const detected = transcription.language ?? "";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const detected = (transcription as any).language ?? "";
 
   // Map detected ISO code to whichever of the two languages it matches
   let detectedLanguage: string;
