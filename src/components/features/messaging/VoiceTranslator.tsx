@@ -26,7 +26,8 @@ export function VoiceTranslator({ onTranslated }: VoiceTranslatorProps) {
   const [stage, setStage] = useState<Stage>("idle");
   const [transcript, setTranscript] = useState("");
   const [translated, setTranslated] = useState("");
-  const recognitionRef = useRef<InstanceType<typeof window.SpeechRecognition> | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
 
   function startListening() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,7 +37,8 @@ export function VoiceTranslator({ onTranslated }: VoiceTranslatorProps) {
       return;
     }
 
-    const recognition = new SpeechRecognition() as InstanceType<typeof window.SpeechRecognition>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recognition: any = new SpeechRecognition();
     recognition.lang = "en-US";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
@@ -46,7 +48,8 @@ export function VoiceTranslator({ onTranslated }: VoiceTranslatorProps) {
     setTranscript("");
     setTranslated("");
 
-    recognition.onresult = async (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onresult = async (event: any) => {
       const text = event.results[0][0].transcript;
       setTranscript(text);
       setStage("translating");
