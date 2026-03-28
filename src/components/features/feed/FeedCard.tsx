@@ -5,6 +5,7 @@ import { Heart, MessageCircle, Share2, MapPin, Bookmark } from "lucide-react";
 import { Avatar } from "@/components/ui/Avatar";
 import { Badge } from "@/components/ui/Badge";
 import { cn, formatRelativeTime, formatCount } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
 import type { FeedItem, FeedItemType } from "@/types/domain";
 
 const TYPE_LABELS: Record<FeedItemType, { label: string; color: string }> = {
@@ -19,20 +20,67 @@ const TYPE_LABELS: Record<FeedItemType, { label: string; color: string }> = {
 interface FeedCardProps {
   item: FeedItem;
   onLike?: (id: string) => void;
+  userId?: string;
 }
 
-export function FeedCard({ item, onLike }: FeedCardProps) {
+export function FeedCard({ item, onLike, userId }: FeedCardProps) {
   const [liked, setLiked] = useState(item.isLiked);
   const [likes, setLikes] = useState(item.likesCount);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<Array<{ id: string; body: string; author_name: string; created_at: string }>>([]);
+  const [commentsLoaded, setCommentsLoaded] = useState(false);
+  const [commentInput, setCommentInput] = useState("");
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const [localCommentCount, setLocalCommentCount] = useState(item.commentsCount);
+
   const typeInfo = TYPE_LABELS[item.type];
 
+  // Fix 1: call onLike outside any state updater to prevent double-fire in StrictMode
   function handleLike() {
-    setLiked((prev) => {
-      const next = !prev;
-      setLikes((l) => (next ? l + 1 : l - 1));
-      onLike?.(item.id);
-      return next;
-    });
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikes((l) => (newLiked ? l + 1 : l - 1));
+    onLike?.(item.id);
+  }
+
+  async function handleCommentClick() {
+    const opening = !showComments;
+    setShowComments(opening);
+    if (opening && !commentsLoaded) {
+      const { data } = await supabase
+        .from("post_comments")
+        .select("id, body, created_at, author:users!author_id(name)")
+        .eq("post_id", item.id)
+        .order("created_at", { ascending: true });
+
+      setComments(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (data ?? []).map((c: any) => ({
+          id: c.id,
+          body: c.body,
+          author_name: c.author?.name ?? "Unknown",
+          created_at: c.created_at,
+        }))
+      );
+      setCommentsLoaded(true);
+    }
+  }
+
+  async function handleCommentSubmit() {
+    if (!commentInput.trim() || !userId || submittingComment) return;
+    setSubmittingComment(true);
+    const { data, error } = await supabase
+      .from("post_comments")
+      .insert({ post_id: item.id, author_id: userId, body: commentInput.trim() })
+      .select("id, created_at")
+      .single();
+    if (!error && data) {
+      setComments((prev) => [...prev, { id: data.id, body: commentInput.trim(), author_name: "You", created_at: data.created_at }]);
+      setLocalCommentCount((n) => n + 1);
+      await supabase.from("posts").update({ comments_count: localCommentCount + 1 }).eq("id", item.id);
+      setCommentInput("");
+    }
+    setSubmittingComment(false);
   }
 
   return (
@@ -73,12 +121,29 @@ export function FeedCard({ item, onLike }: FeedCardProps) {
         )}
       </div>
 
-      {/* Optional image placeholder */}
+      {/* Post image */}
       {item.imageUrl && (
-        <div className="mx-4 mb-3 overflow-hidden rounded-lg bg-slate-100 aspect-video">
-          {/* Image would render here */}
+        <div className="mx-4 mb-3 overflow-hidden rounded-lg bg-slate-100">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.imageUrl}
+            alt="Post image"
+            className="w-full object-cover max-h-80"
+          />
         </div>
       )}
+
+      {/* Tagged users */}
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      {((item as any).taggedUsersJson as { id: string; name: string }[] | undefined)?.length ? (
+        <div className="px-4 pb-2 text-xs text-slate-500">
+          with{" "}
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {((item as any).taggedUsersJson as { id: string; name: string }[])
+            .map((u) => `@${u.name}`)
+            .join(", ")}
+        </div>
+      ) : null}
 
       {/* Action bar */}
       <div className="flex items-center gap-1 border-t border-slate-50 px-4 py-2.5">
@@ -95,9 +160,17 @@ export function FeedCard({ item, onLike }: FeedCardProps) {
           {formatCount(likes)}
         </button>
 
-        <button className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors">
+        <button
+          onClick={handleCommentClick}
+          className={cn(
+            "flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors",
+            showComments
+              ? "text-brand-600 hover:bg-brand-50"
+              : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+          )}
+        >
           <MessageCircle className="h-4 w-4" />
-          {formatCount(item.commentsCount)}
+          {formatCount(localCommentCount)}
         </button>
 
         <div className="flex-1" />
@@ -113,6 +186,44 @@ export function FeedCard({ item, onLike }: FeedCardProps) {
           <Share2 className="h-4 w-4" />
         </button>
       </div>
+
+      {/* Comment section */}
+      {showComments && (
+        <div className="border-t border-slate-50 px-4 py-3 space-y-3">
+          {!commentsLoaded ? (
+            <p className="text-xs text-slate-400">Loading…</p>
+          ) : comments.length === 0 ? (
+            <p className="text-xs text-slate-400">No comments yet. Be the first!</p>
+          ) : (
+            <div className="space-y-2">
+              {comments.map((c) => (
+                <div key={c.id} className="flex gap-2 text-sm">
+                  <span className="font-medium text-slate-800 shrink-0">{c.author_name}</span>
+                  <span className="text-slate-600">{c.body}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {userId && (
+            <div className="flex gap-2 items-center border border-slate-200 rounded-lg px-3 py-1.5">
+              <input
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleCommentSubmit(); } }}
+                placeholder="Add a comment…"
+                className="flex-1 text-sm bg-transparent focus:outline-none placeholder:text-slate-400"
+              />
+              <button
+                onClick={handleCommentSubmit}
+                disabled={!commentInput.trim() || submittingComment}
+                className="text-xs font-medium text-brand-600 disabled:text-slate-300 hover:text-brand-700 transition-colors"
+              >
+                {submittingComment ? "…" : "Post"}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </article>
   );
 }

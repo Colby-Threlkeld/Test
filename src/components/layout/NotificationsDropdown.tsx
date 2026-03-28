@@ -4,10 +4,13 @@ import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Check, MessageCircle, Users, Calendar, Heart, Settings } from "lucide-react";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { cn, formatRelativeTime } from "@/lib/utils";
 import type { AppNotification, NotificationType } from "@/types/domain";
+import { useUIStore } from "@/store/ui";
 
 const typeIcon: Record<NotificationType, React.ReactNode> = {
   message: <MessageCircle className="h-3.5 w-3.5" />,
@@ -27,12 +30,12 @@ const typeColor: Record<NotificationType, string> = {
   system: "bg-slate-100 text-slate-600",
 };
 
-function NotificationItem({ notification }: { notification: AppNotification }) {
+function NotificationItem({ notification, userId }: { notification: AppNotification; userId?: string }) {
   const router = useRouter();
   const { markRead } = useNotifications();
 
   function handleClick() {
-    markRead(notification.id);
+    markRead(notification.id, userId);
     if (notification.linkTo) router.push(notification.linkTo);
   }
 
@@ -76,9 +79,81 @@ function NotificationItem({ notification }: { notification: AppNotification }) {
 }
 
 export function NotificationsDropdown() {
-  const { notifications, unreadCount, isOpen, toggleNotifications, closeNotifications, markAllRead } =
+  const { notifications, unreadCount, isOpen, toggleNotifications, closeNotifications, markAllRead, setNotifications } =
     useNotifications();
+  const { user } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userId = (user as any)?.id as string | undefined;
   const ref = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const realtimeRef = useRef<any>(null);
+
+  // Load notifications from Supabase on mount
+  useEffect(() => {
+    if (!userId) return;
+    supabase
+      .from("notifications")
+      .select("id, type, title, body, is_read, link_to, actor_avatar_url, created_at")
+      .eq("user_id", userId)
+      .eq("is_read", false)
+      .order("created_at", { ascending: false })
+      .limit(20)
+      .then(({ data }) => {
+        if (!data) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setNotifications(data.map((n: any) => ({
+          id: n.id,
+          type: n.type,
+          title: n.title,
+          body: n.body,
+          isRead: n.is_read,
+          linkTo: n.link_to ?? undefined,
+          actorAvatarUrl: n.actor_avatar_url ?? undefined,
+          createdAt: n.created_at,
+        })));
+      });
+  }, [userId, setNotifications]);
+
+  // Realtime subscription for new notifications
+  useEffect(() => {
+    if (!userId) return;
+
+    realtimeRef.current = supabase
+      .channel(`notifications-${userId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload: any) => {
+          const n = payload.new;
+          const newNotif: AppNotification = {
+            id: n.id,
+            type: n.type,
+            title: n.title,
+            body: n.body,
+            isRead: n.is_read,
+            linkTo: n.link_to ?? undefined,
+            actorAvatarUrl: n.actor_avatar_url ?? undefined,
+            createdAt: n.created_at,
+          };
+          const { notifications: current, setNotifications } = useUIStore.getState();
+          setNotifications([newNotif, ...current]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      if (realtimeRef.current) {
+        supabase.removeChannel(realtimeRef.current);
+        realtimeRef.current = null;
+      }
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   // Close on outside click
   useEffect(() => {
@@ -118,7 +193,7 @@ export function NotificationsDropdown() {
             <h3 className="text-sm font-semibold text-slate-900">Notifications</h3>
             {unreadCount > 0 && (
               <button
-                onClick={markAllRead}
+                onClick={() => markAllRead(userId)}
                 className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
               >
                 <Check className="h-3 w-3" />
@@ -135,7 +210,7 @@ export function NotificationsDropdown() {
                 <p className="mt-2 text-sm text-slate-500">You're all caught up</p>
               </div>
             ) : (
-              notifications.map((n) => <NotificationItem key={n.id} notification={n} />)
+              notifications.map((n) => <NotificationItem key={n.id} notification={n} userId={userId} />)
             )}
           </div>
 

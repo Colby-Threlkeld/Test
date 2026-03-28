@@ -92,4 +92,5 @@ src/
 3. Implement `POST /api/auth/register` for signup
 4. Add server-side weather route (`/api/weather`) and connect WeatherWidget
 5. Add Supabase Realtime to `ChatWindow` for live messaging
-6. Layer OpenAI translation (voice or text) onto `MessageComposer`
+6. Layer OpenAI translation 
+(voice or text) onto `MessageComposer`

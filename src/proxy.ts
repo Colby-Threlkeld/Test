@@ -7,8 +7,10 @@ export const config = {
   matcher: [
     "/home/:path*",
     "/messages/:path*",
+    "/translate/:path*",
     "/communities/:path*",
     "/planning/:path*",
     "/settings/:path*",
+    "/profile/:path*",
   ],
 };

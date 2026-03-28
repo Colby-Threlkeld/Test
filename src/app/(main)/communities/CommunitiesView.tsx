@@ -1,20 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import { CommunityCard } from "@/components/features/communities/CommunityCard";
 import { CommunityFilters } from "@/components/features/communities/CommunityFilters";
-import { MOCK_COMMUNITIES } from "@/data/mock";
-import type { Community } from "@/types/domain";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
+import type { Community, CommunityType } from "@/types/domain";
 
 export function CommunitiesView() {
   const router = useRouter();
+  const { user } = useAuth();
+  const userId = (user as any)?.id as string | undefined;
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const [communities, setCommunities] = useState<Community[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const joined = MOCK_COMMUNITIES.filter((c) => c.isJoined);
-  const discover = MOCK_COMMUNITIES.filter((c) => !c.isJoined);
+  useEffect(() => {
+    async function load() {
+      const { data, error } = await supabase
+        .from("communities")
+        .select("*")
+        .order("member_count", { ascending: false });
+
+      if (error || !data) { setLoading(false); return; }
+
+      let joinedIds = new Set<string>();
+      if (userId) {
+        const { data: memberships } = await supabase
+          .from("community_members")
+          .select("community_id")
+          .eq("user_id", userId);
+        joinedIds = new Set(memberships?.map((m: any) => m.community_id) ?? []);
+      }
+
+      setCommunities(
+        data.map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          description: c.description ?? "",
+          type: c.type as CommunityType,
+          coverImage: c.cover_image ?? undefined,
+          memberCount: c.member_count,
+          isJoined: joinedIds.has(c.id),
+          isPrivate: c.is_private,
+          cityId: c.city_id ?? undefined,
+          eventId: c.event_id ?? undefined,
+          tags: c.tags ?? [],
+          createdAt: c.created_at,
+        }))
+      );
+      setLoading(false);
+    }
+    load();
+  }, [userId]);
+
+  const joined = communities.filter((c) => c.isJoined);
+  const discover = communities.filter((c) => !c.isJoined);
 
   function filtered(list: Community[]) {
     return list.filter((c) => {
@@ -25,6 +69,19 @@ export function CommunitiesView() {
       const matchesFilter = activeFilter === "all" || c.type === activeFilter;
       return matchesQuery && matchesFilter;
     });
+  }
+
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-4">
+        <CommunityFilters onSearch={setQuery} onFilter={setActiveFilter} activeFilter={activeFilter} />
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          {[1, 2, 3, 4].map((n) => (
+            <div key={n} className="h-36 rounded-xl bg-slate-100 animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (

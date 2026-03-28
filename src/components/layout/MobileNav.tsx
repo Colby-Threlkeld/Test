@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, MessageCircle, Users, CalendarDays, Settings } from "lucide-react";
+import { Home, MessageCircle, Users, CalendarDays, Settings, Languages } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { label: "Home", href: "/home", icon: Home },
   { label: "Messages", href: "/messages", icon: MessageCircle },
+  { label: "Translate", href: "/translate", icon: Languages },
   { label: "Communities", href: "/communities", icon: Users },
   { label: "Planning", href: "/planning", icon: CalendarDays },
   { label: "Settings", href: "/settings", icon: Settings },

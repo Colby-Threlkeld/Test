@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
-import { Send, Paperclip, Smile } from "lucide-react";
+import { Send, Paperclip, Smile, Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { VoiceTranslator } from "./VoiceTranslator";
 
 interface MessageComposerProps {
   onSend: (body: string) => void;
@@ -16,6 +17,7 @@ export function MessageComposer({
   disabled = false,
 }: MessageComposerProps) {
   const [value, setValue] = useState("");
+  const [showVoice, setShowVoice] = useState(false);
 
   function handleSend() {
     const trimmed = value.trim();
@@ -33,9 +35,24 @@ export function MessageComposer({
 
   return (
     <div className="border-t border-slate-100 bg-white px-4 py-3">
+      {showVoice && (
+        <div className="mb-3">
+          <VoiceTranslator onTranslated={(text) => setValue(text)} />
+        </div>
+      )}
       <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-400/20 transition-all">
         <button className="mb-1 shrink-0 rounded-lg p-1 text-slate-400 hover:text-slate-600 transition-colors">
           <Paperclip className="h-4 w-4" />
+        </button>
+
+        <button
+          onClick={() => setShowVoice((v) => !v)}
+          className={cn(
+            "mb-1 shrink-0 rounded-lg p-1 transition-colors",
+            showVoice ? "text-brand-600 hover:text-brand-700" : "text-slate-400 hover:text-slate-600"
+          )}
+        >
+          <Mic className="h-4 w-4" />
         </button>
 
         <textarea

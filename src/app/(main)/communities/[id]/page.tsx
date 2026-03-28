@@ -2,23 +2,46 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Users, Lock, ChevronLeft, Globe } from "lucide-react";
+import { getServerSession } from "next-auth/next";
 import { AppShell } from "@/components/layout/AppShell";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { MOCK_COMMUNITIES } from "@/data/mock";
+import { authOptions } from "@/lib/auth";
+import { supabase } from "@/lib/supabase";
 
-interface Props {
-  params: { id: string };
+type Props = { params: Promise<{ id: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const { data } = await supabase
+    .from("communities")
+    .select("name")
+    .eq("id", id)
+    .single();
+  return { title: data?.name ?? "Community" };
 }
 
-export function generateMetadata({ params }: Props): Metadata {
-  const community = MOCK_COMMUNITIES.find((c) => c.id === params.id);
-  return { title: community?.name ?? "Community" };
-}
+export default async function CommunityDetailPage({ params }: Props) {
+  const { id } = await params;
 
-export default function CommunityDetailPage({ params }: Props) {
-  const community = MOCK_COMMUNITIES.find((c) => c.id === params.id);
+  const [{ data: community }, session] = await Promise.all([
+    supabase.from("communities").select("*").eq("id", id).single(),
+    getServerSession(authOptions),
+  ]);
+
   if (!community) notFound();
+
+  const userId = (session?.user as any)?.id as string | undefined;
+  let isJoined = false;
+  if (userId) {
+    const { data: membership } = await supabase
+      .from("community_members")
+      .select("user_id")
+      .eq("community_id", id)
+      .eq("user_id", userId)
+      .maybeSingle();
+    isJoined = !!membership;
+  }
 
   return (
     <AppShell pageTitle={community.name}>
@@ -33,7 +56,7 @@ export default function CommunityDetailPage({ params }: Props) {
 
         {/* Cover */}
         <div className="relative h-32 w-full overflow-hidden rounded-xl bg-gradient-to-r from-brand-500 to-brand-700">
-          {community.isPrivate && (
+          {community.is_private && (
             <span className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-black/30 px-2.5 py-1 text-xs font-medium text-white">
               <Lock className="h-3 w-3" /> Private
             </span>
@@ -44,20 +67,20 @@ export default function CommunityDetailPage({ params }: Props) {
         <div className="mt-4">
           <div className="flex items-start justify-between gap-3">
             <h1 className="text-lg font-bold text-slate-900 leading-snug">{community.name}</h1>
-            <Button variant={community.isJoined ? "secondary" : "primary"} size="sm">
-              {community.isJoined ? "Joined" : "Join community"}
+            <Button variant={isJoined ? "secondary" : "primary"} size="sm">
+              {isJoined ? "Joined" : "Join community"}
             </Button>
           </div>
 
           <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-slate-500">
             <span className="flex items-center gap-1">
               <Users className="h-4 w-4" />
-              {community.memberCount.toLocaleString()} members
+              {community.member_count.toLocaleString()} members
             </span>
-            {community.cityId && (
+            {community.city_id && (
               <span className="flex items-center gap-1">
                 <Globe className="h-4 w-4" />
-                {community.cityId.toUpperCase()}
+                {community.city_id.toUpperCase()}
               </span>
             )}
           </div>
@@ -66,7 +89,7 @@ export default function CommunityDetailPage({ params }: Props) {
 
           {/* Tags */}
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {community.tags.map((tag) => (
+            {(community.tags ?? []).map((tag: string) => (
               <Badge key={tag} variant="outline">#{tag}</Badge>
             ))}
           </div>
@@ -77,7 +100,7 @@ export default function CommunityDetailPage({ params }: Props) {
           <h2 className="mb-3 text-sm font-semibold text-slate-700">Recent posts</h2>
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 py-14 text-center">
             <p className="text-sm text-slate-400">Community posts will appear here.</p>
-            {community.isJoined && (
+            {isJoined && (
               <Button variant="primary" size="sm" className="mt-3">
                 Post to community
               </Button>

@@ -10,6 +10,7 @@ import {
   Settings,
   Globe,
   LogOut,
+  Languages,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Avatar } from "@/components/ui/Avatar";
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 const NAV_ITEMS = [
   { label: "Home", href: "/home", icon: Home },
   { label: "Messages", href: "/messages", icon: MessageCircle },
+  { label: "Translate", href: "/translate", icon: Languages },
   { label: "Communities", href: "/communities", icon: Users },
   { label: "Planning", href: "/planning", icon: CalendarDays },
   { label: "Settings", href: "/settings", icon: Settings },

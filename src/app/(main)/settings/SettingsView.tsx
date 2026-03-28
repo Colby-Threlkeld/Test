@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { User, Bell, Lock, Palette, LogOut, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, Bell, Lock, Palette, LogOut, ChevronRight, Check, Loader2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase";
 import { Avatar } from "@/components/ui/Avatar";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -52,8 +53,15 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 
 export function SettingsView() {
   const { user, signOut } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userId = (user as any)?.id as string | undefined;
 
-  const [notifications, setNotifications] = useState({
+  const [displayName, setDisplayName] = useState(user?.name ?? "");
+  const [bio, setBio] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const [notifications, setNotificationsState] = useState({
     messages: true,
     communityActivity: true,
     eventReminders: true,
@@ -66,6 +74,51 @@ export function SettingsView() {
     allowMessages: true,
   });
 
+  // Load persisted prefs on mount
+  useEffect(() => {
+    if (!userId) return;
+    if (user?.name) setDisplayName(user.name);
+
+    // Load bio from DB
+    supabase.from("users").select("bio").eq("id", userId).single().then(({ data }) => {
+      if (data?.bio) setBio(data.bio);
+    });
+
+    // Load notification/privacy prefs from localStorage
+    try {
+      const savedNotifs = localStorage.getItem(`fanzone_notifs_${userId}`);
+      if (savedNotifs) setNotificationsState(JSON.parse(savedNotifs));
+      const savedPrivacy = localStorage.getItem(`fanzone_privacy_${userId}`);
+      if (savedPrivacy) setPrivacy(JSON.parse(savedPrivacy));
+    } catch {
+      // ignore corrupt localStorage
+    }
+  }, [userId, user?.name]);
+
+  function handleNotifChange(key: keyof typeof notifications, v: boolean) {
+    const next = { ...notifications, [key]: v };
+    setNotificationsState(next);
+    if (userId) localStorage.setItem(`fanzone_notifs_${userId}`, JSON.stringify(next));
+  }
+
+  function handlePrivacyChange(key: keyof typeof privacy, v: boolean) {
+    const next = { ...privacy, [key]: v };
+    setPrivacy(next);
+    if (userId) localStorage.setItem(`fanzone_privacy_${userId}`, JSON.stringify(next));
+  }
+
+  async function handleSaveProfile() {
+    if (!userId || saving || !displayName.trim()) return;
+    setSaving(true);
+    await supabase
+      .from("users")
+      .update({ name: displayName.trim(), bio: bio.trim() || null })
+      .eq("id", userId);
+    setSaving(false);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2500);
+  }
+
   return (
     <div className="mx-auto max-w-lg px-4 py-4">
       {/* Profile section */}
@@ -75,38 +128,51 @@ export function SettingsView() {
         <div className="mt-4 flex items-center gap-4">
           <Avatar src={user?.image} name={user?.name ?? ""} size="xl" />
           <div>
-            <p className="text-base font-semibold text-slate-900">{user?.name}</p>
+            <p className="text-base font-semibold text-slate-900">{displayName || user?.name}</p>
             <p className="text-sm text-slate-500">{user?.email}</p>
-            <Button variant="outline" size="sm" className="mt-2">
-              Edit photo
-            </Button>
           </div>
         </div>
 
         <div className="mt-4 grid gap-4">
           <Input
             label="Display name"
-            defaultValue={user?.name ?? ""}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
             placeholder="Your name"
           />
           <Input
             label="Email"
             type="email"
-            defaultValue={user?.email ?? ""}
+            value={user?.email ?? ""}
+            readOnly
             placeholder="you@example.com"
           />
           <div>
             <label className="text-sm font-medium text-slate-700">Bio</label>
             <textarea
               rows={2}
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
               placeholder="Tell other fans a bit about you…"
               className="mt-1.5 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
             />
           </div>
         </div>
 
-        <Button className="mt-4 w-full" variant="primary" size="md">
-          Save changes
+        <Button
+          className="mt-4 w-full"
+          variant="primary"
+          size="md"
+          onClick={handleSaveProfile}
+          disabled={saving || !displayName.trim()}
+        >
+          {saving ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : saveSuccess ? (
+            <><Check className="h-4 w-4" /> Saved</>
+          ) : (
+            "Save changes"
+          )}
         </Button>
       </section>
 
@@ -118,25 +184,25 @@ export function SettingsView() {
             label="Direct messages"
             description="When someone sends you a message"
             enabled={notifications.messages}
-            onChange={(v) => setNotifications((n) => ({ ...n, messages: v }))}
+            onChange={(v) => handleNotifChange("messages", v)}
           />
           <Toggle
             label="Community activity"
             description="Posts and updates from communities you've joined"
             enabled={notifications.communityActivity}
-            onChange={(v) => setNotifications((n) => ({ ...n, communityActivity: v }))}
+            onChange={(v) => handleNotifChange("communityActivity", v)}
           />
           <Toggle
             label="Event reminders"
             description="Match-day and itinerary reminders"
             enabled={notifications.eventReminders}
-            onChange={(v) => setNotifications((n) => ({ ...n, eventReminders: v }))}
+            onChange={(v) => handleNotifChange("eventReminders", v)}
           />
           <Toggle
             label="Marketing & updates"
             description="New features and FanZone announcements"
             enabled={notifications.marketing}
-            onChange={(v) => setNotifications((n) => ({ ...n, marketing: v }))}
+            onChange={(v) => handleNotifChange("marketing", v)}
           />
         </div>
       </section>
@@ -149,19 +215,19 @@ export function SettingsView() {
             label="Public profile"
             description="Anyone can view your profile and posts"
             enabled={privacy.publicProfile}
-            onChange={(v) => setPrivacy((p) => ({ ...p, publicProfile: v }))}
+            onChange={(v) => handlePrivacyChange("publicProfile", v)}
           />
           <Toggle
             label="Show location"
             description="Display your current city on your profile"
             enabled={privacy.showLocation}
-            onChange={(v) => setPrivacy((p) => ({ ...p, showLocation: v }))}
+            onChange={(v) => handlePrivacyChange("showLocation", v)}
           />
           <Toggle
             label="Allow direct messages"
             description="Let other users message you"
             enabled={privacy.allowMessages}
-            onChange={(v) => setPrivacy((p) => ({ ...p, allowMessages: v }))}
+            onChange={(v) => handlePrivacyChange("allowMessages", v)}
           />
         </div>
       </section>

@@ -1,16 +1,12 @@
 import type {
-  FeedItem,
   Community,
-  MessageThread,
-  Message,
-  ItineraryItem,
-  AppNotification,
   GlobalEvent,
   City,
 } from "@/types/domain";
 
 // ─────────────────────────────────────────────
 // Events
+// These constants are used as fallback references — migrate to DB when an events table is added.
 // ─────────────────────────────────────────────
 
 export const MOCK_CITIES: City[] = [
@@ -33,82 +29,13 @@ export const MOCK_EVENT: GlobalEvent = {
 };
 
 // ─────────────────────────────────────────────
-// Feed
+// Itinerary
 // ─────────────────────────────────────────────
 
-export const MOCK_FEED_ITEMS: FeedItem[] = [
-  {
-    id: "f1",
-    type: "fan_post",
-    author: {
-      id: "u2",
-      name: "Carlos Mendez",
-      avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=carlos",
-      nationality: "MX",
-    },
-    body: "Just landed in Dallas. The energy at the airport is insane — fans from everywhere. This is what it's about. 🌍⚽",
-    likesCount: 84,
-    commentsCount: 12,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 23).toISOString(),
-    cityId: "dal",
-    eventId: "wc2026",
-    tags: ["Dallas", "WorldCup2026"],
-  },
-  {
-    id: "f2",
-    type: "local_tip",
-    author: {
-      id: "u3",
-      name: "Priya Nair",
-      avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=priya",
-      nationality: "IN",
-    },
-    body: "For anyone heading to Miami matches — Wynwood is the spot for pre-game. Bars stay open late and there's a huge screen set up near the food hall. Much better than the stadium concourses.",
-    likesCount: 211,
-    commentsCount: 34,
-    isLiked: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    cityId: "mia",
-    eventId: "wc2026",
-    tags: ["Miami", "LocalTip", "Wynwood"],
-  },
-  {
-    id: "f3",
-    type: "meetup",
-    author: {
-      id: "u4",
-      name: "Jonas Weber",
-      avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=jonas",
-      nationality: "DE",
-    },
-    body: "Organizing a German supporters meetup in NYC before the Group Stage opener. Anyone in? Targeting a bar in Midtown. Drop your details below and I'll share the invite.",
-    likesCount: 57,
-    commentsCount: 28,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    cityId: "nyc",
-    eventId: "wc2026",
-    tags: ["NYC", "Germany", "Meetup"],
-  },
-  {
-    id: "f4",
-    type: "travel_tip",
-    author: {
-      id: "u5",
-      name: "Sofia Almeida",
-      avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=sofia",
-      nationality: "BR",
-    },
-    body: "Heads up: Metro lines in LA get completely overwhelmed on match days. Leave 90 minutes early minimum or use rideshare pickup zones marked in the official app. The walk from the nearest station is also longer than Google Maps suggests.",
-    likesCount: 394,
-    commentsCount: 61,
-    isLiked: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 9).toISOString(),
-    cityId: "lax",
-    eventId: "wc2026",
-    tags: ["LosAngeles", "Travel", "Transport"],
-  },
+export const MOCK_ITINERARY_ITEMS: { id: string; title: string; date: string; time?: string }[] = [
+  { id: "it1", title: "Brazil vs Mexico — Group Stage", date: "2026-06-22", time: "15:00" },
+  { id: "it2", title: "Fan Fest at Dallas Fair Park", date: "2026-06-23", time: "11:00" },
+  { id: "it3", title: "Toronto Arrival & Hotel Check-in", date: "2026-06-28" },
 ];
 
 // ─────────────────────────────────────────────
@@ -177,157 +104,5 @@ export const MOCK_COMMUNITIES: Community[] = [
     eventId: "wc2026",
     tags: ["Toronto", "Arrivals", "Welcome"],
     createdAt: "2026-02-01T00:00:00Z",
-  },
-];
-
-// ─────────────────────────────────────────────
-// Messages
-// ─────────────────────────────────────────────
-
-export const MOCK_THREADS: MessageThread[] = [
-  {
-    id: "t1",
-    participants: [
-      { id: "u2", name: "Carlos Mendez", avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=carlos" },
-    ],
-    lastMessage: {
-      id: "m3",
-      threadId: "t1",
-      senderId: "u2",
-      body: "See you at the fan zone at 6. Look for the green jersey.",
-      createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-      isRead: false,
-    },
-    unreadCount: 2,
-    updatedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-    isGroup: false,
-  },
-  {
-    id: "t2",
-    participants: [
-      { id: "u3", name: "Priya Nair", avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=priya" },
-      { id: "u4", name: "Jonas Weber", avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=jonas" },
-      { id: "u5", name: "Sofia Almeida", avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=sofia" },
-    ],
-    lastMessage: {
-      id: "m8",
-      threadId: "t2",
-      senderId: "u3",
-      body: "The hotel lobby at 7pm works for everyone?",
-      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-      isRead: true,
-    },
-    unreadCount: 0,
-    updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-    isGroup: true,
-    groupName: "Miami Match Crew",
-  },
-];
-
-export const MOCK_MESSAGES: Record<string, Message[]> = {
-  t1: [
-    { id: "m1", threadId: "t1", senderId: "u1", body: "Hey, heading to Dallas tomorrow. You around?", createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(), isRead: true },
-    { id: "m2", threadId: "t1", senderId: "u2", body: "Yes! Already here since yesterday. City is wild.", createdAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(), isRead: true },
-    { id: "m3", threadId: "t1", senderId: "u2", body: "See you at the fan zone at 6. Look for the green jersey.", createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(), isRead: false },
-  ],
-  t2: [
-    { id: "m5", threadId: "t2", senderId: "u5", body: "We should coordinate for the semifinal.", createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), isRead: true },
-    { id: "m6", threadId: "t2", senderId: "u4", body: "Agreed. I'm in Miami from the 12th.", createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(), isRead: true },
-    { id: "m7", threadId: "t2", senderId: "u5", body: "Same. Should we meet before the match?", createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3.5).toISOString(), isRead: true },
-    { id: "m8", threadId: "t2", senderId: "u3", body: "The hotel lobby at 7pm works for everyone?", createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(), isRead: true },
-  ],
-};
-
-// ─────────────────────────────────────────────
-// Planning
-// ─────────────────────────────────────────────
-
-export const MOCK_ITINERARY_ITEMS: ItineraryItem[] = [
-  {
-    id: "i1",
-    type: "travel",
-    title: "Flight to Dallas (DFW)",
-    notes: "American Airlines AA 2341 — Terminal D",
-    date: "2026-06-14",
-    time: "08:45",
-    location: "JFK International Airport",
-    cityId: "nyc",
-    confirmed: true,
-  },
-  {
-    id: "i2",
-    type: "match",
-    title: "Group Stage: Match Day 1",
-    notes: "Section 112, Row F — arrive 2h early for entry",
-    date: "2026-06-15",
-    time: "19:00",
-    location: "AT&T Stadium, Dallas",
-    cityId: "dal",
-    confirmed: true,
-  },
-  {
-    id: "i3",
-    type: "meetup",
-    title: "German Supporters Pre-Game Meetup",
-    notes: "Organized via FanZone — green jerseys as identifier",
-    date: "2026-06-15",
-    time: "16:00",
-    location: "The Rustic, Dallas",
-    cityId: "dal",
-    confirmed: false,
-  },
-  {
-    id: "i4",
-    type: "accommodation",
-    title: "Hotel check-in — Omni Dallas",
-    date: "2026-06-14",
-    time: "15:00",
-    location: "555 S Lamar St, Dallas",
-    cityId: "dal",
-    confirmed: true,
-  },
-];
-
-// ─────────────────────────────────────────────
-// Notifications
-// ─────────────────────────────────────────────
-
-export const MOCK_NOTIFICATIONS: AppNotification[] = [
-  {
-    id: "n1",
-    type: "message",
-    title: "Carlos Mendez",
-    body: "See you at the fan zone at 6. Look for the green jersey.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-    linkTo: "/messages/t1",
-    actorAvatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=carlos",
-  },
-  {
-    id: "n2",
-    type: "community_activity",
-    title: "Brazil Supporters — North America",
-    body: "New post: Match-day transport guide for Dallas just shared.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 40).toISOString(),
-    linkTo: "/communities/c1",
-  },
-  {
-    id: "n3",
-    type: "event_reminder",
-    title: "Match tomorrow",
-    body: "Group Stage: Match Day 1 is at 7:00 PM. Don't forget to check transport.",
-    isRead: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-    linkTo: "/planning",
-  },
-  {
-    id: "n4",
-    type: "social_interaction",
-    title: "Priya Nair liked your post",
-    body: "Your local tip about stadium transport got 40 new likes.",
-    isRead: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-    actorAvatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=priya",
   },
 ];

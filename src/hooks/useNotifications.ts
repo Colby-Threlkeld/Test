@@ -10,6 +10,7 @@ export function useNotifications() {
     openNotifications,
     closeNotifications,
     toggleNotifications,
+    setNotifications,
     markRead,
     markAllRead,
   } = useUIStore();
@@ -21,6 +22,7 @@ export function useNotifications() {
     openNotifications,
     closeNotifications,
     toggleNotifications,
+    setNotifications,
     markRead,
     markAllRead,
   };

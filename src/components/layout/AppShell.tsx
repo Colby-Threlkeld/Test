@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { Sidebar } from "./Sidebar";
 import { MobileNav } from "./MobileNav";
 import { TopBar } from "./TopBar";
+import { useUserLocation } from "@/hooks/useUserLocation";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -11,6 +13,9 @@ interface AppShellProps {
 }
 
 export function AppShell({ children, pageTitle, rightPanel }: AppShellProps) {
+  const { detect } = useUserLocation();
+  useEffect(() => { detect(); }, [detect]);
+
   return (
     <div className="flex h-screen w-full overflow-hidden bg-slate-50">
       {/* Desktop sidebar */}
