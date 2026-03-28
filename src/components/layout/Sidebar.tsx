@@ -57,7 +57,7 @@ export function Sidebar() {
     <aside className="flex h-full w-60 shrink-0 flex-col border-r border-slate-700/40 bg-[#0d0d15] px-3 py-4">
       {/* Logo */}
       <Link href="/home" className="mb-6 flex items-center gap-3 px-3 py-1">
-        <Image src="/logo-circa.png" alt="Circa" width={40} height={40} className="shrink-0" />
+        <Image src="/logo-circa.svg" alt="Circa" width={40} height={40} className="shrink-0" />
         <span className="text-2xl font-bold tracking-tight text-slate-100">Circa</span>
       </Link>
 

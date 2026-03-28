@@ -7,7 +7,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Minimal header */}
       <header className="px-6 py-5">
         <Link href="/" className="flex items-center gap-2.5 w-fit">
-          <Image src="/logo-circa.png" alt="Circa" width={38} height={38} className="shrink-0" />
+          <Image src="/logo-circa.svg" alt="Circa" width={38} height={38} className="shrink-0" />
           <span className="text-2xl font-bold tracking-tight text-slate-100">Circa</span>
         </Link>
       </header>

@@ -41,7 +41,7 @@ export function TopBar({ title, className }: TopBarProps) {
       >
         {/* Mobile: Logo */}
         <Link href="/home" className="flex items-center gap-2.5 lg:hidden">
-          <Image src="/logo-circa.png" alt="Circa" width={34} height={34} className="shrink-0" />
+          <Image src="/logo-circa.svg" alt="Circa" width={34} height={34} className="shrink-0" />
           <span className="text-xl font-bold tracking-tight text-slate-100">Circa</span>
         </Link>
 
