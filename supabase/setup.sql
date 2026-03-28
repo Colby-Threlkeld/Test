@@ -218,15 +218,49 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.notifications TO anon;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.notifications TO authenticated;
 
 -- ─────────────────────────────────────────────
--- Seed communities (idempotent)
+-- Reset communities
 -- ─────────────────────────────────────────────
 
-INSERT INTO public.communities (name, description, type, member_count, is_private, city_id, event_id, tags, created_at) VALUES
-  ('Brazil Supporters — North America',  'The official gathering place for Brazilian fans attending matches across the US, Canada, and Mexico. Match-day coordination, fan zones, and travel tips.',                                'national_supporters', 4821, false, NULL,  'wc2026', ARRAY['Brazil','CBF','SelecaoNasCopas'],       '2025-09-01T00:00:00Z'),
-  ('Dallas Match Week — Group Stage',    'Everything you need for the Group Stage matches in Dallas: tickets, transport, tailgates, and local recommendations from people already on the ground.',                               'city_based',          1203, false, 'dal', 'wc2026', ARRAY['Dallas','GroupStage','ATT Stadium'],      '2025-11-15T00:00:00Z'),
-  ('US Soccer Fan Network',              'The home base for USMNT supporters — from everyday MLS fans to those making the trip to cheer on the home side.',                                                                    'national_supporters', 9340, false, NULL,  'wc2026', ARRAY['USMNT','USASoccer','BeBoldOrBeGone'],      '2024-06-01T00:00:00Z'),
-  ('Traveling Fans Without Tickets',     'A community for the thousands of fans who make the trip for the atmosphere — whether or not they have a ticket. Watch parties, fan fests, and city guides.',                         'fan_identity',        2617, false, NULL,  'wc2026', ARRAY['FanFest','WatchParty','NoTicketNeeded'],   '2026-01-10T00:00:00Z'),
-  ('Toronto Arrivals & Welcome',         'Helping international fans navigate Toronto — airport transfers, accommodation, SIM cards, and meeting locals who know the city.',                                                    'city_based',           788, false, 'tor', 'wc2026', ARRAY['Toronto','Arrivals','Welcome'],             '2026-02-01T00:00:00Z')
+DELETE FROM public.community_members;
+DELETE FROM public.communities;
+
+-- ─────────────────────────────────────────────
+-- Seed communities
+-- ─────────────────────────────────────────────
+
+INSERT INTO public.communities (name, description, type, cover_image, member_count, is_private, tags) VALUES
+(
+  'F1 Global Fans',
+  'The home for Formula 1 fans worldwide. Race previews, live reactions, travel to Grand Prix events, and connecting with fans at every circuit on the calendar.',
+  'event_official',
+  'https://images.unsplash.com/photo-1541348263662-e068662d82af?w=800&q=80',
+  0, false,
+  ARRAY['formula1','racing','grandprix','motorsport']
+),
+(
+  'World Cup 2026',
+  'Official fan community for FIFA World Cup 2026 hosted across the USA, Canada, and Mexico. Match schedules, city guides, fan meetups, and travel planning.',
+  'event_official',
+  'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80',
+  0, false,
+  ARRAY['worldcup','football','soccer','fifa','2026']
+),
+(
+  'Olympics Community',
+  'Connecting fans of the Olympic Games. Summer, Winter, and Paralympic events — share your passion for the world''s greatest sporting celebration.',
+  'event_official',
+  'https://images.unsplash.com/photo-1569517282132-25d22f4573e6?w=800&q=80',
+  0, false,
+  ARRAY['olympics','sports','paris2024','la2028']
+),
+(
+  'Music Festival Hub',
+  'For fans who travel the world for live music. Coachella, Glastonbury, Tomorrowland, Lollapalooza and more — find festival friends, share setlists, plan your season.',
+  'fan_identity',
+  'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80',
+  0, false,
+  ARRAY['festival','music','concerts','livemusic']
+)
 ON CONFLICT (name) DO NOTHING;
 
 -- ─────────────────────────────────────────────

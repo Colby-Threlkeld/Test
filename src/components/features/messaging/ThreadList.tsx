@@ -16,14 +16,14 @@ export function ThreadList({ threads, activeThreadId, onSelect, onDelete }: Thre
   if (threads.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center px-6">
-        <p className="text-sm font-medium text-slate-700">No conversations yet</p>
+        <p className="text-sm font-medium text-slate-400">No conversations yet</p>
         <p className="mt-1 text-xs text-slate-400">Start by messaging someone from a community or their profile.</p>
       </div>
     );
   }
 
   return (
-    <div className="divide-y divide-slate-50">
+    <div className="divide-y divide-white/5">
       {threads.map((thread) => {
         const isActive = thread.id === activeThreadId;
         const displayName = thread.isGroup
@@ -36,7 +36,7 @@ export function ThreadList({ threads, activeThreadId, onSelect, onDelete }: Thre
             key={thread.id}
             className={cn(
               "group relative flex items-start gap-3 px-4 py-3.5 transition-colors",
-              isActive ? "bg-brand-50" : "hover:bg-slate-50"
+              isActive ? "bg-brand-600/10" : "hover:bg-white/5"
             )}
           >
             <button
@@ -51,7 +51,7 @@ export function ThreadList({ threads, activeThreadId, onSelect, onDelete }: Thre
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between">
-                  <p className={cn("truncate text-sm", thread.unreadCount > 0 ? "font-semibold text-slate-900" : "font-medium text-slate-700")}>
+                  <p className={cn("truncate text-sm", thread.unreadCount > 0 ? "font-semibold text-slate-100" : "font-medium text-slate-300")}>
                     {displayName}
                   </p>
                   <span className="shrink-0 text-[11px] text-slate-400">
@@ -59,7 +59,7 @@ export function ThreadList({ threads, activeThreadId, onSelect, onDelete }: Thre
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-0.5">
-                  <p className={cn("truncate text-xs", thread.unreadCount > 0 ? "text-slate-700 font-medium" : "text-slate-400")}>
+                  <p className={cn("truncate text-xs", thread.unreadCount > 0 ? "text-slate-300 font-medium" : "text-slate-500")}>
                     {thread.lastMessage?.body}
                   </p>
                   {thread.unreadCount > 0 && (
@@ -74,7 +74,7 @@ export function ThreadList({ threads, activeThreadId, onSelect, onDelete }: Thre
             {onDelete && (
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(thread.id); }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 hidden rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-500 group-hover:flex"
+                className="absolute right-3 top-1/2 -translate-y-1/2 hidden rounded-md p-1.5 text-slate-500 hover:bg-red-500/10 hover:text-red-400 group-hover:flex"
                 title="Delete conversation"
               >
                 <Trash2 className="h-3.5 w-3.5" />

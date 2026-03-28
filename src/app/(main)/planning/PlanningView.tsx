@@ -144,7 +144,7 @@ export function PlanningView() {
     return (
       <div className="mx-auto max-w-xl px-4 py-4">
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-slate-900">My Trips</h2>
+          <h2 className="text-base font-semibold text-slate-100">My Trips</h2>
           <Button size="sm" variant="primary" onClick={() => setCreateTripOpen(true)}>
             <Plus className="h-3.5 w-3.5" />
             New Trip
@@ -154,12 +154,12 @@ export function PlanningView() {
         {tripsLoading ? (
           <div className="space-y-3">
             {[1, 2].map((n) => (
-              <div key={n} className="h-24 rounded-xl bg-slate-100 animate-pulse" />
+              <div key={n} className="h-24 rounded-xl bg-white/5 animate-pulse" />
             ))}
           </div>
         ) : trips.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 py-16 text-center">
-            <Map className="h-8 w-8 text-slate-300" />
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700/50 py-16 text-center">
+            <Map className="h-8 w-8 text-slate-600" />
             <p className="mt-2 text-sm text-slate-500">No trips yet.</p>
             <p className="text-xs text-slate-400 mb-3">Plan your World Cup experience.</p>
             <Button variant="primary" size="sm" onClick={() => setCreateTripOpen(true)}>
@@ -175,11 +175,11 @@ export function PlanningView() {
                 <button
                   key={trip.id}
                   onClick={() => { setSelectedTripId(trip.id); setFilter("all"); setPlanItems([]); }}
-                  className="w-full text-left rounded-xl border border-slate-100 bg-white p-4 shadow-card hover:border-brand-200 hover:shadow-md transition-all"
+                  className="w-full text-left rounded-xl border border-slate-700/40 bg-[#12121a] p-4 shadow-card hover:border-brand-500/30 hover:shadow-md transition-all"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-slate-900 truncate">{trip.name}</p>
+                      <p className="font-semibold text-slate-100 truncate">{trip.name}</p>
                       {trip.event_name && (
                         <p className="text-xs text-slate-500 mt-0.5">{trip.event_name}</p>
                       )}
@@ -222,7 +222,7 @@ export function PlanningView() {
       {/* Back button */}
       <button
         onClick={() => setSelectedTripId(null)}
-        className="mb-4 flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700"
+        className="mb-4 flex items-center gap-1 text-sm font-medium text-brand-400 hover:text-brand-300"
       >
         <ChevronLeft className="h-4 w-4" />
         My Trips
@@ -270,7 +270,7 @@ export function PlanningView() {
 
       {/* Actions */}
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-800">Itinerary</h3>
+        <h3 className="text-sm font-semibold text-slate-200">Itinerary</h3>
         <Button size="sm" variant="primary" onClick={() => setModalOpen(true)}>
           <Plus className="h-3.5 w-3.5" />
           Add item
@@ -286,8 +286,8 @@ export function PlanningView() {
             className={cn(
               "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
               filter === value
-                ? "border-brand-500 bg-brand-50 text-brand-700"
-                : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                ? "border-brand-500/50 bg-brand-600/15 text-brand-400"
+                : "border-slate-700/50 bg-white/5 text-slate-400 hover:bg-white/8"
             )}
           >
             {label}
@@ -297,8 +297,8 @@ export function PlanningView() {
 
       {/* Items grouped by date */}
       {Object.keys(byDate).length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 py-14 text-center">
-          <CalendarDays className="h-8 w-8 text-slate-300" />
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700/50 py-14 text-center">
+          <CalendarDays className="h-8 w-8 text-slate-600" />
           <p className="mt-2 text-sm text-slate-500">Nothing planned yet</p>
           <Button variant="primary" size="sm" className="mt-3" onClick={() => setModalOpen(true)}>
             <Plus className="h-3.5 w-3.5" /> Add first item
@@ -312,7 +312,7 @@ export function PlanningView() {
                 <span className="text-xs font-semibold text-slate-500">
                   {formatFullDate(date)}
                 </span>
-                <div className="h-px flex-1 bg-slate-100" />
+                <div className="h-px flex-1 bg-white/8" />
                 <Badge variant="default">{dateItems.length} item{dateItems.length > 1 ? "s" : ""}</Badge>
               </div>
               <div className="space-y-2">

@@ -267,7 +267,7 @@ export function PostComposerModal({
       onClick={handleClose}
     >
       <div
-        className="w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl p-5 shadow-xl"
+        className="w-full sm:max-w-lg bg-[#12121a] border border-slate-700/40 rounded-t-2xl sm:rounded-2xl p-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -279,19 +279,19 @@ export function PostComposerModal({
               value={body}
               onChange={handleBodyChange}
               placeholder="What's on your mind?"
-              className="w-full min-h-[96px] resize-none text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
+              className="w-full min-h-[96px] resize-none text-sm text-slate-100 placeholder:text-slate-500 bg-transparent focus:outline-none"
             />
             {/* Mention dropdown */}
             {mentionResults.length > 0 && (
-              <ul className="absolute bottom-full left-0 right-0 z-20 mb-1 rounded-lg border border-slate-200 bg-white shadow-lg text-sm max-h-40 overflow-y-auto">
+              <ul className="absolute bottom-full left-0 right-0 z-20 mb-1 rounded-lg border border-slate-700/50 bg-[#1a1a27] shadow-lg text-sm max-h-40 overflow-y-auto">
                 {mentionResults.map((u) => (
                   <li key={u.id}>
                     <button
                       type="button"
-                      className="flex w-full items-center gap-2 px-3 py-2 hover:bg-slate-50 text-left"
+                      className="flex w-full items-center gap-2 px-3 py-2 hover:bg-white/8 text-left"
                       onMouseDown={(e) => { e.preventDefault(); handleMentionSelect(u); }}
                     >
-                      <span className="font-medium text-slate-800">{u.name}</span>
+                      <span className="font-medium text-slate-200">{u.name}</span>
                     </button>
                   </li>
                 ))}
@@ -306,7 +306,7 @@ export function PostComposerModal({
             {taggedUsers.map((u) => (
               <span
                 key={u.id}
-                className="flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs text-brand-700"
+                className="flex items-center gap-1 rounded-full bg-brand-600/15 px-2 py-0.5 text-xs text-brand-400"
               >
                 @{u.name}
                 <button
@@ -341,7 +341,7 @@ export function PostComposerModal({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 hover:bg-white/8 transition-colors"
           >
             <ImageIcon className="h-4 w-4" />
             Add photo
@@ -367,7 +367,7 @@ export function PostComposerModal({
                 className={
                   selectedType === value
                     ? "rounded-full px-3 py-1 text-xs font-medium bg-brand-600 text-white"
-                    : "rounded-full px-3 py-1 text-xs font-medium border border-slate-200 text-slate-600 hover:bg-slate-50"
+                    : "rounded-full px-3 py-1 text-xs font-medium border border-slate-700/50 text-slate-400 hover:bg-white/5"
                 }
               >
                 {label}
@@ -384,7 +384,7 @@ export function PostComposerModal({
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
             placeholder="#worldcup #dallas"
-            className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400"
+            className="w-full text-sm border border-slate-700/50 bg-[#1a1a27] text-slate-100 placeholder:text-slate-500 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
           />
         </div>
 
@@ -400,15 +400,15 @@ export function PostComposerModal({
               value={locationInput}
               onChange={(e) => { setLocationInput(e.target.value); setSelectedLocation(""); }}
               placeholder="City, State"
-              className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400"
+              className="w-full text-sm border border-slate-700/50 bg-[#1a1a27] text-slate-100 placeholder:text-slate-500 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors"
             />
             {locationSuggestions.length > 0 && (
-              <ul className="absolute top-full left-0 right-0 z-10 mt-1 rounded-lg border border-sky-200 bg-white shadow-lg text-xs">
+              <ul className="absolute top-full left-0 right-0 z-10 mt-1 rounded-lg border border-slate-700/50 bg-[#1a1a27] shadow-lg text-xs">
                 {locationSuggestions.map((s) => (
                   <li key={s}>
                     <button
                       type="button"
-                      className="w-full px-3 py-2 text-left hover:bg-sky-50 transition-colors"
+                      className="w-full px-3 py-2 text-left text-slate-300 hover:bg-white/8 transition-colors"
                       onClick={() => {
                         setLocationInput(s);
                         setSelectedLocation(s);
@@ -426,11 +426,11 @@ export function PostComposerModal({
 
         {/* Error */}
         {errorMsg && (
-          <p className="text-sm text-red-500 mb-3">{errorMsg}</p>
+          <p className="text-sm text-red-400 mb-3">{errorMsg}</p>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-slate-100 pt-4">
+        <div className="flex items-center justify-between border-t border-slate-700/40 pt-4">
           <Button variant="ghost" size="sm" onClick={handleClose}>
             Cancel
           </Button>

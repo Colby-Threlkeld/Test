@@ -1,4 +1,4 @@
-# FanZone
+# Circa
 
 A global fan social platform — built for major live events (World Cup, Olympics, F1, and more). Connect with fans worldwide, follow live feeds, plan your trip, and coordinate with your crew.
 
@@ -22,7 +22,7 @@ A global fan social platform — built for major live events (World Cup, Olympic
 
    ```bash
    git clone <repo-url>
-   cd fanzone
+   cd circa
    npm install
    ```
 

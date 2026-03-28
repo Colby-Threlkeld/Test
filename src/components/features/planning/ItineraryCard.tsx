@@ -9,13 +9,13 @@ const TYPE_CONFIG: Record<
   ItineraryItemType,
   { icon: React.ElementType; color: string; badgeVariant: "default" | "primary" | "success" | "warning" | "outline" }
 > = {
-  match:          { icon: Ticket,    color: "text-brand-600 bg-brand-50",    badgeVariant: "primary" },
-  travel:         { icon: Plane,     color: "text-sky-600 bg-sky-50",        badgeVariant: "outline" },
-  accommodation:  { icon: Building2, color: "text-violet-600 bg-violet-50",  badgeVariant: "outline" },
-  activity:       { icon: Star,      color: "text-amber-600 bg-amber-50",    badgeVariant: "warning" },
-  meetup:         { icon: Users,     color: "text-emerald-600 bg-emerald-50",badgeVariant: "success" },
-  food:           { icon: Utensils,  color: "text-orange-600 bg-orange-50",  badgeVariant: "warning" },
-  transport:      { icon: Bus,       color: "text-slate-600 bg-slate-100",   badgeVariant: "default" },
+  match:         { icon: Ticket,    color: "text-brand-400 bg-brand-600/15",   badgeVariant: "primary" },
+  travel:        { icon: Plane,     color: "text-sky-400 bg-sky-500/15",       badgeVariant: "outline" },
+  accommodation: { icon: Building2, color: "text-violet-400 bg-violet-500/15", badgeVariant: "outline" },
+  activity:      { icon: Star,      color: "text-amber-400 bg-amber-500/15",   badgeVariant: "warning" },
+  meetup:        { icon: Users,     color: "text-emerald-400 bg-emerald-500/15",badgeVariant: "success" },
+  food:          { icon: Utensils,  color: "text-orange-400 bg-orange-500/15", badgeVariant: "warning" },
+  transport:     { icon: Bus,       color: "text-slate-400 bg-white/8",        badgeVariant: "default" },
 };
 
 interface ItineraryCardProps {
@@ -30,9 +30,9 @@ export function ItineraryCard({ item, onEdit }: ItineraryCardProps) {
   return (
     <div
       className={cn(
-        "flex items-start gap-3 rounded-xl border border-slate-100 bg-white p-4 shadow-card",
+        "flex items-start gap-3 rounded-xl border border-slate-700/40 bg-[#12121a] p-4 shadow-card",
         "transition-shadow hover:shadow-card-hover",
-        !item.confirmed && "border-dashed opacity-80"
+        !item.confirmed && "border-dashed opacity-70"
       )}
     >
       {/* Icon */}
@@ -42,7 +42,7 @@ export function ItineraryCard({ item, onEdit }: ItineraryCardProps) {
 
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-sm font-semibold text-slate-900 leading-snug">{item.title}</p>
+          <p className="text-sm font-semibold text-slate-100 leading-snug">{item.title}</p>
           <Badge variant={config.badgeVariant} className="shrink-0 capitalize">
             {item.type.replace("_", " ")}
           </Badge>
@@ -53,18 +53,18 @@ export function ItineraryCard({ item, onEdit }: ItineraryCardProps) {
         )}
 
         {item.notes && (
-          <p className="mt-1 text-xs text-slate-400 line-clamp-1">{item.notes}</p>
+          <p className="mt-1 text-xs text-slate-500 line-clamp-1">{item.notes}</p>
         )}
 
         <div className="mt-2 flex items-center gap-3">
-          <span className="text-xs font-medium text-slate-600">
+          <span className="text-xs font-medium text-slate-400">
             {formatShortDate(item.date)}{item.time ? ` · ${item.time}` : ""}
           </span>
           {!item.confirmed && (
-            <span className="text-xs text-amber-600 font-medium">Unconfirmed</span>
+            <span className="text-xs text-amber-400 font-medium">Unconfirmed</span>
           )}
           {item.confirmed && (
-            <span className="text-xs text-emerald-600 font-medium">Confirmed</span>
+            <span className="text-xs text-emerald-400 font-medium">Confirmed</span>
           )}
         </div>
       </div>

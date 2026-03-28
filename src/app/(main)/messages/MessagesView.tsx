@@ -337,12 +337,12 @@ export function MessagesView() {
         {/* Thread list — always visible on desktop, visible on mobile when no thread selected */}
         <div
           className={cn(
-            "flex w-full flex-col border-r border-slate-100 bg-white lg:w-72 xl:w-80",
+            "flex w-full flex-col border-r border-slate-700/40 bg-[#0d0d15] lg:w-72 xl:w-80",
             activeThreadId && "hidden lg:flex"
           )}
         >
-          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5">
-            <h2 className="text-sm font-semibold text-slate-900">Messages</h2>
+          <div className="flex items-center justify-between border-b border-slate-700/40 px-4 py-3.5">
+            <h2 className="text-sm font-semibold text-slate-100">Messages</h2>
             <Button
               variant="ghost"
               size="icon"
@@ -375,7 +375,7 @@ export function MessagesView() {
               {/* Mobile back */}
               <button
                 onClick={() => setActiveThreadId(null)}
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-brand-600 hover:text-brand-700 lg:hidden"
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-brand-400 hover:text-brand-300 lg:hidden"
               >
                 ← Back to messages
               </button>
@@ -385,9 +385,9 @@ export function MessagesView() {
             </>
           ) : (
             <div className="hidden flex-1 flex-col items-center justify-center gap-3 lg:flex">
-              <MessageCircle className="h-12 w-12 text-slate-200" />
-              <p className="text-sm font-medium text-slate-600">Select a conversation</p>
-              <p className="text-xs text-slate-400">
+              <MessageCircle className="h-12 w-12 text-slate-700" />
+              <p className="text-sm font-medium text-slate-400">Select a conversation</p>
+              <p className="text-xs text-slate-500">
                 Or start a new message from a community or user profile.
               </p>
             </div>

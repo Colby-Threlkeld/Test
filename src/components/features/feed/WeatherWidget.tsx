@@ -40,7 +40,7 @@ export function WeatherWidget() {
 
   // Hydrate from localStorage after mount to avoid SSR mismatch
   useEffect(() => {
-    const saved = localStorage.getItem("fanzone_weather_city");
+    const saved = localStorage.getItem("circa_weather_city");
     if (saved) {
       setActiveCity(saved);
       setInputValue(saved);
@@ -50,7 +50,7 @@ export function WeatherWidget() {
   // When location is detected for the first time, update if no manual city is saved
   useEffect(() => {
     if (!userLocation) return;
-    const saved = localStorage.getItem("fanzone_weather_city");
+    const saved = localStorage.getItem("circa_weather_city");
     if (!saved || saved === "Dallas") {
       setActiveCity(userLocation.locationLabel);
       setInputValue(userLocation.locationLabel);
@@ -110,14 +110,14 @@ export function WeatherWidget() {
     const trimmed = inputValue.trim();
     if (trimmed) {
       setActiveCity(trimmed);
-      localStorage.setItem("fanzone_weather_city", trimmed);
+      localStorage.setItem("circa_weather_city", trimmed);
       setSuggestions([]);
       setEditing(false);
     }
   }
 
   return (
-    <Card padding="md" className="bg-gradient-to-br from-sky-50 to-blue-50 border-sky-100">
+    <Card padding="md" className="bg-gradient-to-br from-sky-950/60 to-brand-950/60 border-slate-700/40">
       {/* Location row */}
       <div className="flex items-center gap-1.5 text-xs font-medium text-slate-500 mb-2">
         <MapPin className="h-3 w-3 shrink-0" />
@@ -132,26 +132,26 @@ export function WeatherWidget() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="City, Country"
-              className="flex-1 text-xs bg-white border border-sky-200 rounded px-2 py-0.5 outline-none focus:ring-1 focus:ring-sky-300"
+              className="flex-1 text-xs bg-[#1a1a27] border border-slate-700/50 text-slate-200 rounded px-2 py-0.5 outline-none focus:ring-1 focus:ring-brand-500/40 placeholder:text-slate-500"
             />
             <button
               type="submit"
-              className="p-0.5 rounded hover:bg-sky-100 text-sky-500"
+              className="p-0.5 rounded hover:bg-white/10 text-brand-400"
               aria-label="Search"
             >
               <Search className="h-3.5 w-3.5" />
             </button>
             {suggestions.length > 0 && (
-              <ul className="absolute top-full left-0 right-0 z-10 mt-1 rounded-lg border border-sky-200 bg-white shadow-lg text-xs">
+              <ul className="absolute top-full left-0 right-0 z-10 mt-1 rounded-lg border border-slate-700/50 bg-[#1a1a27] shadow-lg text-xs">
                 {suggestions.map((s) => (
                   <li key={s}>
                     <button
                       type="button"
-                      className="w-full px-3 py-2 text-left hover:bg-sky-50 transition-colors"
+                      className="w-full px-3 py-2 text-left text-slate-200 hover:bg-white/8 transition-colors"
                       onClick={() => {
                         setInputValue(s);
                         setActiveCity(s);
-                        localStorage.setItem("fanzone_weather_city", s);
+                        localStorage.setItem("circa_weather_city", s);
                         setSuggestions([]);
                         setEditing(false);
                       }}
@@ -166,7 +166,7 @@ export function WeatherWidget() {
         ) : (
           <button
             onClick={() => { setEditing(true); setInputValue(weather?.city ?? activeCity); }}
-            className="hover:underline hover:text-sky-600 transition-colors"
+            className="hover:underline hover:text-brand-400 transition-colors"
             title="Change location"
           >
             Weather near {weather?.city ?? activeCity}
@@ -187,10 +187,10 @@ export function WeatherWidget() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="flex items-end gap-2">
-                <span className="text-3xl font-bold text-slate-800">{weather.temp}°F</span>
+                <span className="text-3xl font-bold text-slate-100">{weather.temp}°F</span>
                 <span className="mb-1 text-sm text-slate-500">Feels {weather.feelsLike}°</span>
               </div>
-              <p className="text-sm font-medium text-slate-600">{weather.condition}</p>
+              <p className="text-sm font-medium text-slate-300">{weather.condition}</p>
             </div>
             <div className="flex flex-col items-end gap-1">
               {WEATHER_ICONS[weather.icon]}

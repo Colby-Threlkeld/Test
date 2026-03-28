@@ -10,20 +10,20 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: { default: "FanZone", template: "%s · FanZone" },
-  description: "The fan platform for global events — connect, plan, and share with fans worldwide.",
+  title: { default: "Circa", template: "%s · Circa" },
+  description: "Circa — connect, plan, and share with fans worldwide.",
   keywords: ["soccer", "football", "World Cup", "fans", "travel", "events"],
 };
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#4f46e5",
+  themeColor: "#5a8b5d",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} dark`} suppressHydrationWarning>
       <body>
         <SessionProvider>{children}</SessionProvider>
       </body>

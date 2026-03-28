@@ -60,16 +60,16 @@ export default function SignUpPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Join FanZone</h1>
+        <h1 className="text-2xl font-bold text-slate-100">Join Circa</h1>
         <p className="mt-1 text-sm text-slate-500">
           Connect with fans, plan your trip, and be part of something global.
         </p>
       </div>
 
       {error && (
-        <div className="flex items-start gap-2.5 rounded-lg border border-amber-100 bg-amber-50 p-3">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-          <p className="text-sm text-amber-700">{error}</p>
+        <div className="flex items-start gap-2.5 rounded-lg border border-amber-500/20 bg-amber-500/10 p-3">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
+          <p className="text-sm text-amber-400">{error}</p>
         </div>
       )}
 
@@ -115,14 +115,14 @@ export default function SignUpPage() {
 
       <p className="text-center text-xs text-slate-400 leading-relaxed">
         By signing up you agree to our{" "}
-        <Link href="#" className="text-brand-600 hover:underline">Terms</Link>{" "}
+        <Link href="#" className="text-brand-400 hover:underline">Terms</Link>{" "}
         and{" "}
-        <Link href="#" className="text-brand-600 hover:underline">Privacy Policy</Link>.
+        <Link href="#" className="text-brand-400 hover:underline">Privacy Policy</Link>.
       </p>
 
       <p className="text-center text-sm text-slate-500">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-brand-600 hover:text-brand-700">
+        <Link href="/login" className="font-medium text-brand-400 hover:text-brand-300">
           Sign in
         </Link>
       </p>

@@ -110,7 +110,7 @@ export function HomeRightPanel() {
     if (!userLocation?.city) return;
 
     const locationKey = `${userLocation.city}|${userLocation.state ?? ""}`;
-    const cacheKey = `fanzone_events_${userId ?? "anon"}_${locationKey}`;
+    const cacheKey = `circa_events_${userId ?? "anon"}_${locationKey}`;
     const now = Date.now();
 
     // 1. Check in-session Zustand store — zero cost, no I/O
@@ -170,7 +170,7 @@ export function HomeRightPanel() {
   function handleRefreshEvents() {
     if (!userLocation?.city) return;
     const locationKey = `${userLocation.city}|${userLocation.state ?? ""}`;
-    const cacheKey = `fanzone_events_${userId ?? "anon"}_${locationKey}`;
+    const cacheKey = `circa_events_${userId ?? "anon"}_${locationKey}`;
     clearEventsCache();
     try { localStorage.removeItem(cacheKey); } catch {}
     setRefreshToken((t) => t + 1);
@@ -182,23 +182,23 @@ export function HomeRightPanel() {
       <div>
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Upcoming</h3>
-          <Link href="/planning" className="text-xs font-medium text-brand-600 hover:text-brand-700">View all</Link>
+          <Link href="/planning" className="text-xs font-medium text-brand-400 hover:text-brand-300">View all</Link>
         </div>
         <div className="space-y-2">
           {loadingItinerary ? (
             <>
               {[1, 2].map((n) => (
-                <div key={n} className="h-14 rounded-lg bg-slate-100 animate-pulse" />
+                <div key={n} className="h-14 rounded-lg bg-white/5 animate-pulse" />
               ))}
             </>
           ) : itinerary.length === 0 ? (
             <p className="text-xs text-slate-400">No upcoming plans. Start planning your trip.</p>
           ) : (
             itinerary.map((item) => (
-              <div key={item.id} className="flex items-center gap-2.5 rounded-lg border border-slate-100 bg-slate-50 p-2.5">
+              <div key={item.id} className="flex items-center gap-2.5 rounded-lg border border-slate-700/40 bg-white/5 p-2.5">
                 <Calendar className="h-4 w-4 shrink-0 text-brand-400" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-medium text-slate-800">{item.title}</p>
+                  <p className="truncate text-xs font-medium text-slate-200">{item.title}</p>
                   <p className="text-[10px] text-slate-400">
                     {formatShortDate(item.date)}{item.time ? ` · ${item.time}` : ""}
                   </p>
@@ -213,13 +213,13 @@ export function HomeRightPanel() {
       <div>
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">Suggested</h3>
-          <Link href="/communities" className="text-xs font-medium text-brand-600 hover:text-brand-700">Browse</Link>
+          <Link href="/communities" className="text-xs font-medium text-brand-400 hover:text-brand-300">Browse</Link>
         </div>
         <div className="space-y-2">
           {loadingCommunities ? (
             <>
               {[1, 2, 3].map((n) => (
-                <div key={n} className="h-14 rounded-lg bg-slate-100 animate-pulse" />
+                <div key={n} className="h-14 rounded-lg bg-white/5 animate-pulse" />
               ))}
             </>
           ) : (
@@ -227,16 +227,16 @@ export function HomeRightPanel() {
               <Link
                 key={community.id}
                 href={`/communities/${community.id}`}
-                className="flex items-center gap-2.5 rounded-lg border border-slate-100 bg-slate-50 p-2.5 hover:bg-white transition-colors group"
+                className="flex items-center gap-2.5 rounded-lg border border-slate-700/40 bg-white/5 p-2.5 hover:bg-white/8 transition-colors group"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-100">
-                  <Users className="h-4 w-4 text-brand-600" />
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600/20">
+                  <Users className="h-4 w-4 text-brand-400" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-medium text-slate-800 leading-snug">{community.name}</p>
-                  <p className="text-[10px] text-slate-400">{community.member_count.toLocaleString()} members</p>
+                  <p className="truncate text-xs font-medium text-slate-200 leading-snug">{community.name}</p>
+                  <p className="text-[10px] text-slate-500">{community.member_count.toLocaleString()} members</p>
                 </div>
-                <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-300 group-hover:text-slate-500 transition-colors" />
+                <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-600 group-hover:text-slate-400 transition-colors" />
               </Link>
             ))
           )}
@@ -262,7 +262,7 @@ export function HomeRightPanel() {
             {loadingEvents ? (
               <>
                 {[1, 2, 3].map((n) => (
-                  <div key={n} className="h-16 rounded-lg bg-slate-100 animate-pulse" />
+                  <div key={n} className="h-16 rounded-lg bg-white/5 animate-pulse" />
                 ))}
               </>
             ) : aiEvents.length === 0 ? (
@@ -271,13 +271,13 @@ export function HomeRightPanel() {
               aiEvents.map((ev, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-2.5 rounded-lg border border-slate-100 bg-slate-50 p-2.5"
+                  className="flex items-start gap-2.5 rounded-lg border border-slate-700/40 bg-white/5 p-2.5"
                 >
                   <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-brand-400" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-medium text-slate-800 leading-snug">{ev.name}</p>
-                    <p className="text-[10px] text-slate-400">{ev.date}{ev.venue ? ` · ${ev.venue}` : ""}</p>
-                    <span className="mt-1 inline-block rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-semibold text-brand-600">
+                    <p className="truncate text-xs font-medium text-slate-200 leading-snug">{ev.name}</p>
+                    <p className="text-[10px] text-slate-500">{ev.date}{ev.venue ? ` · ${ev.venue}` : ""}</p>
+                    <span className="mt-1 inline-block rounded-full bg-brand-600/20 px-2 py-0.5 text-[10px] font-semibold text-brand-400">
                       {ev.type}
                     </span>
                   </div>

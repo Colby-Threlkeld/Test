@@ -20,10 +20,10 @@ export function ChatWindow({ thread, messages }: ChatWindowProps) {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       {/* Chat header */}
-      <div className="flex items-center gap-3 border-b border-slate-100 px-5 py-3.5">
+      <div className="flex items-center gap-3 border-b border-slate-700/40 px-5 py-3.5">
         <Avatar src={avatarSrc} name={displayName} size="md" />
         <div>
-          <p className="text-sm font-semibold text-slate-900">{displayName}</p>
+          <p className="text-sm font-semibold text-slate-100">{displayName}</p>
           {thread.isGroup && (
             <p className="text-xs text-slate-500">{thread.participants.length} members</p>
           )}
@@ -50,7 +50,7 @@ export function ChatWindow({ thread, messages }: ChatWindowProps) {
                     "rounded-2xl px-3.5 py-2 text-sm leading-relaxed",
                     isOwn
                       ? "rounded-br-sm bg-brand-600 text-white"
-                      : "rounded-bl-sm bg-slate-100 text-slate-800"
+                      : "rounded-bl-sm bg-[#1a1a27] text-slate-200"
                   )}
                 >
                   {msg.body}

@@ -23,7 +23,7 @@ interface CreateTripModalProps {
 }
 
 const fieldClass =
-  "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400/20 focus:border-brand-400";
+  "w-full border border-slate-700/50 bg-[#1a1a27] rounded-lg px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-colors";
 
 export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTripModalProps) {
   const [name, setName] = useState("");
@@ -91,18 +91,18 @@ export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTrip
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={handleClose}
     >
       <div
-        className="w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl p-5 shadow-xl"
+        className="w-full sm:max-w-lg bg-[#12121a] border border-slate-700/40 rounded-t-2xl sm:rounded-2xl p-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="text-base font-semibold text-slate-900 mb-4">New Trip</h2>
+        <h2 className="text-base font-semibold text-slate-100 mb-4">New Trip</h2>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">Trip name *</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Trip name *</label>
             <input
               type="text"
               value={name}
@@ -114,7 +114,7 @@ export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTrip
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">Event</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Event</label>
             <input
               type="text"
               value={eventName}
@@ -126,7 +126,7 @@ export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTrip
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">Start date</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">Start date</label>
               <input
                 type="date"
                 value={startDate}
@@ -135,7 +135,7 @@ export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTrip
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">End date</label>
+              <label className="block text-xs font-medium text-slate-400 mb-1">End date</label>
               <input
                 type="date"
                 value={endDate}
@@ -146,7 +146,7 @@ export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTrip
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">Description (optional)</label>
+            <label className="block text-xs font-medium text-slate-400 mb-1">Description (optional)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -157,9 +157,9 @@ export function CreateTripModal({ open, onClose, onCreated, userId }: CreateTrip
           </div>
         </div>
 
-        {errorMsg && <p className="text-sm text-red-500 mt-3">{errorMsg}</p>}
+        {errorMsg && <p className="text-sm text-red-400 mt-3">{errorMsg}</p>}
 
-        <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-4">
+        <div className="flex items-center justify-between border-t border-slate-700/40 pt-4 mt-4">
           <Button variant="ghost" size="sm" onClick={handleClose}>
             Cancel
           </Button>

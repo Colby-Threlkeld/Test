@@ -39,7 +39,7 @@ export function CommunityCard({ community, onView }: CommunityCardProps) {
       <div className="p-4">
         {/* Title + type badge */}
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-sm font-semibold text-slate-900 leading-snug">
+          <h3 className="text-sm font-semibold text-slate-100 leading-snug">
             {community.name}
           </h3>
           <Badge variant="outline" className="shrink-0 mt-0.5">
@@ -56,7 +56,7 @@ export function CommunityCard({ community, onView }: CommunityCardProps) {
         {community.tags.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
             {community.tags.slice(0, 3).map((tag) => (
-              <span key={tag} className="text-[10px] font-medium text-brand-600">#{tag}</span>
+              <span key={tag} className="text-[10px] font-medium text-brand-400">#{tag}</span>
             ))}
           </div>
         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Home,
@@ -8,7 +9,6 @@ import {
   Users,
   CalendarDays,
   Settings,
-  Globe,
   LogOut,
   Languages,
 } from "lucide-react";
@@ -39,11 +39,11 @@ function SidebarNavItem({ label, href, icon: Icon, active }: SidebarNavItemProps
       className={cn(
         "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
         active
-          ? "bg-brand-50 text-brand-700"
-          : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          ? "bg-brand-600/15 text-brand-400"
+          : "text-slate-400 hover:bg-white/8 hover:text-slate-200"
       )}
     >
-      <Icon className={cn("h-5 w-5 shrink-0", active ? "text-brand-600" : "text-slate-400")} />
+      <Icon className={cn("h-5 w-5 shrink-0", active ? "text-brand-400" : "text-slate-500")} />
       {label}
     </Link>
   );
@@ -54,13 +54,11 @@ export function Sidebar() {
   const { user, signOut } = useAuth();
 
   return (
-    <aside className="flex h-full w-60 shrink-0 flex-col border-r border-slate-100 bg-white px-3 py-4">
+    <aside className="flex h-full w-60 shrink-0 flex-col border-r border-slate-700/40 bg-[#0d0d15] px-3 py-4">
       {/* Logo */}
-      <Link href="/home" className="mb-6 flex items-center gap-2.5 px-3 py-1">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600">
-          <Globe className="h-5 w-5 text-white" />
-        </span>
-        <span className="text-base font-bold tracking-tight text-slate-900">FanZone</span>
+      <Link href="/home" className="mb-6 flex items-center gap-3 px-3 py-1">
+        <Image src="/logo-circa.png" alt="Circa" width={40} height={40} className="shrink-0" />
+        <span className="text-2xl font-bold tracking-tight text-slate-100">Circa</span>
       </Link>
 
       {/* Nav */}
@@ -75,17 +73,17 @@ export function Sidebar() {
       </nav>
 
       {/* User / Sign out */}
-      <div className="mt-2 border-t border-slate-100 pt-3">
+      <div className="mt-2 border-t border-slate-700/40 pt-3">
         <div className="flex items-center gap-3 rounded-lg px-3 py-2">
           <Avatar src={user?.image} name={user?.name ?? ""} size="sm" />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-slate-900">{user?.name}</p>
+            <p className="truncate text-sm font-medium text-slate-200">{user?.name}</p>
             <p className="truncate text-xs text-slate-500">{user?.email}</p>
           </div>
           <button
             onClick={signOut}
             title="Sign out"
-            className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            className="rounded p-1 text-slate-500 hover:bg-white/8 hover:text-red-400"
           >
             <LogOut className="h-4 w-4" />
           </button>

@@ -46,8 +46,8 @@ export function CommunityFilters({ onSearch, onFilter, activeFilter }: Community
             className={cn(
               "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
               activeFilter === opt.value
-                ? "border-brand-500 bg-brand-50 text-brand-700"
-                : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                ? "border-brand-500/50 bg-brand-600/15 text-brand-400"
+                : "border-slate-700/50 bg-white/5 text-slate-400 hover:border-white/20 hover:bg-white/8"
             )}
           >
             {opt.label}

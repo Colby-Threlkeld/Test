@@ -17,7 +17,7 @@ export function AppShell({ children, pageTitle, rightPanel }: AppShellProps) {
   useEffect(() => { detect(); }, [detect]);
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50">
+    <div className="flex h-screen w-full overflow-hidden bg-[#0a0a0f]">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex">
         <Sidebar />
@@ -36,7 +36,7 @@ export function AppShell({ children, pageTitle, rightPanel }: AppShellProps) {
 
           {/* Optional right panel (desktop only) */}
           {rightPanel && (
-            <aside className="hidden w-80 shrink-0 overflow-y-auto border-l border-slate-100 bg-white p-4 xl:block">
+            <aside className="hidden w-80 shrink-0 overflow-y-auto border-l border-slate-700/40 bg-[#0d0d15] p-4 xl:block">
               {rightPanel}
             </aside>
           )}

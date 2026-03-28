@@ -25,7 +25,7 @@ export function useUserLocation() {
           if (res.ok) {
             const data = await res.json();
             setUserLocation(data);
-            localStorage.setItem("fanzone_weather_city", data.locationLabel);
+            localStorage.setItem("circa_weather_city", data.locationLabel);
           }
         } catch {
           // silent — fallback to defaults

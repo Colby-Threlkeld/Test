@@ -188,9 +188,9 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-xl mx-4 rounded-2xl bg-white shadow-2xl overflow-hidden">
+      <div className="w-full max-w-xl mx-4 rounded-2xl bg-[#12121a] border border-slate-700/40 shadow-2xl overflow-hidden">
         {/* Search input */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-100">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-700/40">
           <Search className="h-5 w-5 shrink-0 text-slate-400" />
           <input
             ref={inputRef}
@@ -198,7 +198,7 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
             value={query}
             onChange={handleQueryChange}
             placeholder="Search fans, communities, events…"
-            className="flex-1 bg-transparent text-sm text-slate-900 placeholder-slate-400 outline-none"
+            className="flex-1 bg-transparent text-sm text-slate-100 placeholder:text-slate-500 outline-none"
           />
           {query && (
             <button
@@ -208,14 +208,14 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                 setCommunities([]);
                 setEvents([]);
               }}
-              className="rounded-full p-0.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+              className="rounded-full p-0.5 text-slate-400 hover:text-slate-200 hover:bg-white/8"
             >
               <X className="h-4 w-4" />
             </button>
           )}
           <button
             onClick={onClose}
-            className="ml-1 text-xs font-medium text-slate-400 hover:text-slate-600 border border-slate-200 rounded px-1.5 py-0.5"
+            className="ml-1 text-xs font-medium text-slate-500 hover:text-slate-300 border border-slate-700/50 rounded px-1.5 py-0.5"
           >
             Esc
           </button>
@@ -228,10 +228,10 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
             <div className="p-4 space-y-3">
               {[1, 2, 3].map((n) => (
                 <div key={n} className="flex items-center gap-3 animate-pulse">
-                  <div className="h-8 w-8 rounded-full bg-slate-200 shrink-0" />
+                  <div className="h-8 w-8 rounded-full bg-white/10 shrink-0" />
                   <div className="flex-1 space-y-1.5">
-                    <div className="h-3 w-32 bg-slate-200 rounded" />
-                    <div className="h-2.5 w-20 bg-slate-100 rounded" />
+                    <div className="h-3 w-32 bg-white/10 rounded" />
+                    <div className="h-2.5 w-20 bg-white/5 rounded" />
                   </div>
                 </div>
               ))}
@@ -240,35 +240,35 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
 
           {!loadingUsers && !query && (
             <div className="flex flex-col items-center justify-center py-12 text-center px-4">
-              <Search className="h-8 w-8 text-slate-200 mb-2" />
+              <Search className="h-8 w-8 text-slate-700 mb-2" />
               <p className="text-sm text-slate-500">Search for fans, communities, and events</p>
             </div>
           )}
 
           {!loadingUsers && !loadingEvents && query && !hasResults && (
             <div className="flex flex-col items-center justify-center py-10 text-center px-4">
-              <p className="text-sm text-slate-500">No results for "{query}"</p>
+              <p className="text-sm text-slate-500">No results for &ldquo;{query}&rdquo;</p>
             </div>
           )}
 
           {/* Selected event detail card */}
           {selectedEvent && (
-            <div className="m-3 rounded-xl border border-brand-100 bg-brand-50 p-4">
+            <div className="m-3 rounded-xl border border-brand-500/20 bg-brand-600/10 p-4">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <span className="inline-block rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-semibold text-white mb-1.5">
                     {selectedEvent.type}
                   </span>
-                  <h4 className="text-sm font-semibold text-slate-900">{selectedEvent.name}</h4>
-                  <p className="mt-0.5 text-xs text-slate-500">{selectedEvent.venue}</p>
-                  <p className="mt-0.5 text-xs text-slate-500">{selectedEvent.date}</p>
-                  <p className="mt-2 text-xs text-slate-600">{selectedEvent.description}</p>
+                  <h4 className="text-sm font-semibold text-slate-100">{selectedEvent.name}</h4>
+                  <p className="mt-0.5 text-xs text-slate-400">{selectedEvent.venue}</p>
+                  <p className="mt-0.5 text-xs text-slate-400">{selectedEvent.date}</p>
+                  <p className="mt-2 text-xs text-slate-300">{selectedEvent.description}</p>
                   {selectedEvent.ticketUrl && (
                     <a
                       href={selectedEvent.ticketUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-block text-xs font-medium text-brand-600 hover:underline"
+                      className="mt-2 inline-block text-xs font-medium text-brand-400 hover:underline"
                     >
                       Get tickets →
                     </a>
@@ -276,7 +276,7 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                 </div>
                 <button
                   onClick={() => setSelectedEvent(null)}
-                  className="ml-2 rounded-full p-1 text-slate-400 hover:text-slate-600 hover:bg-white"
+                  className="ml-2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-white/8"
                 >
                   <X className="h-3.5 w-3.5" />
                 </button>
@@ -288,8 +288,8 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
           {!loadingUsers && users.length > 0 && (
             <div>
               <div className="flex items-center gap-2 px-4 pt-3 pb-1">
-                <Users className="h-3.5 w-3.5 text-slate-400" />
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                <Users className="h-3.5 w-3.5 text-slate-500" />
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                   People
                 </span>
               </div>
@@ -297,16 +297,16 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                 <button
                   key={u.id}
                   onClick={() => handleUserClick(u.id)}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors text-left"
+                  className="flex w-full items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left"
                 >
                   <Avatar src={u.avatar_url} name={u.name} size="sm" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-slate-900">{u.name}</p>
+                    <p className="truncate text-sm font-medium text-slate-200">{u.name}</p>
                     {u.nationality && (
-                      <p className="text-xs text-slate-400">{u.nationality}</p>
+                      <p className="text-xs text-slate-500">{u.nationality}</p>
                     )}
                   </div>
-                  <User className="h-3.5 w-3.5 shrink-0 text-slate-300" />
+                  <User className="h-3.5 w-3.5 shrink-0 text-slate-600" />
                 </button>
               ))}
             </div>
@@ -316,8 +316,8 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
           {!loadingUsers && communities.length > 0 && (
             <div>
               <div className="flex items-center gap-2 px-4 pt-3 pb-1">
-                <Users className="h-3.5 w-3.5 text-slate-400" />
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                <Users className="h-3.5 w-3.5 text-slate-500" />
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                   Communities
                 </span>
               </div>
@@ -325,14 +325,14 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                 <button
                   key={c.id}
                   onClick={() => handleCommunityClick(c.id)}
-                  className="flex w-full items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors text-left"
+                  className="flex w-full items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left"
                 >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-100">
-                    <Users className="h-4 w-4 text-brand-600" />
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600/15">
+                    <Users className="h-4 w-4 text-brand-400" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-slate-900">{c.name}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="truncate text-sm font-medium text-slate-200">{c.name}</p>
+                    <p className="text-xs text-slate-500">
                       {c.member_count.toLocaleString()} members
                     </p>
                   </div>
@@ -344,12 +344,12 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
           {/* Events */}
           <div className="pb-2">
             <div className="flex items-center gap-2 px-4 pt-3 pb-1">
-              <Calendar className="h-3.5 w-3.5 text-slate-400" />
-              <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              <Calendar className="h-3.5 w-3.5 text-slate-500" />
+              <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                 Events
               </span>
               {loadingEvents && (
-                <Loader2 className="h-3 w-3 animate-spin text-slate-300" />
+                <Loader2 className="h-3 w-3 animate-spin text-slate-600" />
               )}
             </div>
             {events.map((ev, i) => (
@@ -357,18 +357,18 @@ export function GlobalSearch({ open, onClose }: GlobalSearchProps) {
                 key={i}
                 onClick={() => setSelectedEvent(ev)}
                 className={cn(
-                  "flex w-full items-start gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors text-left",
-                  selectedEvent === ev && "bg-brand-50"
+                  "flex w-full items-start gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left",
+                  selectedEvent === ev && "bg-brand-600/10"
                 )}
               >
                 <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-brand-400" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-900">{ev.name}</p>
-                  <p className="text-xs text-slate-400">
+                  <p className="truncate text-sm font-medium text-slate-200">{ev.name}</p>
+                  <p className="text-xs text-slate-500">
                     {ev.date} · {ev.venue}
                   </p>
                 </div>
-                <span className="shrink-0 rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-semibold text-brand-600">
+                <span className="shrink-0 rounded-full bg-brand-600/15 px-2 py-0.5 text-[10px] font-semibold text-brand-400">
                   {ev.type}
                 </span>
               </button>

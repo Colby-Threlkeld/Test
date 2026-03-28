@@ -22,12 +22,12 @@ const typeIcon: Record<NotificationType, React.ReactNode> = {
 };
 
 const typeColor: Record<NotificationType, string> = {
-  message: "bg-blue-100 text-blue-600",
-  community_activity: "bg-violet-100 text-violet-600",
-  event_reminder: "bg-amber-100 text-amber-600",
-  planning_update: "bg-emerald-100 text-emerald-600",
-  social_interaction: "bg-pink-100 text-pink-600",
-  system: "bg-slate-100 text-slate-600",
+  message: "bg-blue-500/20 text-blue-400",
+  community_activity: "bg-violet-500/20 text-violet-400",
+  event_reminder: "bg-amber-500/20 text-amber-400",
+  planning_update: "bg-emerald-500/20 text-emerald-400",
+  social_interaction: "bg-pink-500/20 text-pink-400",
+  system: "bg-white/10 text-slate-400",
 };
 
 function NotificationItem({ notification, userId }: { notification: AppNotification; userId?: string }) {
@@ -43,8 +43,8 @@ function NotificationItem({ notification, userId }: { notification: AppNotificat
     <button
       onClick={handleClick}
       className={cn(
-        "flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-slate-50",
-        !notification.isRead && "bg-brand-50/50"
+        "flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-white/5",
+        !notification.isRead && "bg-brand-600/10"
       )}
     >
       <div className="relative mt-0.5 shrink-0">
@@ -64,7 +64,7 @@ function NotificationItem({ notification, userId }: { notification: AppNotificat
       </div>
 
       <div className="min-w-0 flex-1">
-        <p className={cn("text-sm leading-snug", !notification.isRead ? "font-semibold text-slate-900" : "font-medium text-slate-700")}>
+        <p className={cn("text-sm leading-snug", !notification.isRead ? "font-semibold text-slate-100" : "font-medium text-slate-300")}>
           {notification.title}
         </p>
         <p className="mt-0.5 truncate text-xs text-slate-500">{notification.body}</p>
@@ -174,7 +174,7 @@ export function NotificationsDropdown() {
         aria-label="Notifications"
         className={cn(
           "relative flex h-9 w-9 items-center justify-center rounded-lg transition-colors",
-          isOpen ? "bg-brand-50 text-brand-600" : "text-slate-500 hover:bg-slate-100"
+          isOpen ? "bg-brand-600/15 text-brand-400" : "text-slate-400 hover:bg-white/8"
         )}
       >
         <Bell className="h-5 w-5" />
@@ -187,14 +187,14 @@ export function NotificationsDropdown() {
 
       {/* Dropdown panel */}
       {isOpen && (
-        <div className="absolute right-0 top-11 z-50 w-80 overflow-hidden rounded-xl border border-slate-100 bg-white shadow-dropdown sm:w-96">
+        <div className="absolute right-0 top-11 z-50 w-80 overflow-hidden rounded-xl border border-slate-700/50 bg-[#12121a] shadow-dropdown sm:w-96">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
-            <h3 className="text-sm font-semibold text-slate-900">Notifications</h3>
+          <div className="flex items-center justify-between border-b border-slate-700/40 px-4 py-3">
+            <h3 className="text-sm font-semibold text-slate-100">Notifications</h3>
             {unreadCount > 0 && (
               <button
                 onClick={() => markAllRead(userId)}
-                className="flex items-center gap-1 text-xs font-medium text-brand-600 hover:text-brand-700"
+                className="flex items-center gap-1 text-xs font-medium text-brand-400 hover:text-brand-300"
               >
                 <Check className="h-3 w-3" />
                 Mark all read
@@ -203,7 +203,7 @@ export function NotificationsDropdown() {
           </div>
 
           {/* Items */}
-          <div className="max-h-96 overflow-y-auto divide-y divide-slate-50">
+          <div className="max-h-96 overflow-y-auto divide-y divide-white/5">
             {notifications.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
                 <Bell className="h-8 w-8 text-slate-300" />
@@ -215,7 +215,7 @@ export function NotificationsDropdown() {
           </div>
 
           {/* Footer */}
-          <div className="border-t border-slate-100 px-4 py-2">
+          <div className="border-t border-slate-700/40 px-4 py-2">
             <Button variant="ghost" size="sm" className="w-full text-xs text-slate-500">
               View all notifications
             </Button>

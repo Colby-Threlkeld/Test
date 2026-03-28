@@ -35,7 +35,6 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
 
   const typeInfo = TYPE_LABELS[item.type];
 
-  // Fix 1: call onLike outside any state updater to prevent double-fire in StrictMode
   function handleLike() {
     const newLiked = !liked;
     setLiked(newLiked);
@@ -84,13 +83,13 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
   }
 
   return (
-    <article className="rounded-xl border border-slate-100 bg-white shadow-card">
+    <article className="rounded-xl border border-slate-700/40 bg-[#12121a] shadow-card">
       {/* Author row */}
       <div className="flex items-start gap-3 p-4 pb-3">
         <Avatar src={item.author.avatarUrl} name={item.author.name} size="md" />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm font-semibold text-slate-900">{item.author.name}</span>
+            <span className="text-sm font-semibold text-slate-100">{item.author.name}</span>
             {item.author.nationality && (
               <span className="text-sm">{getFlagEmoji(item.author.nationality)}</span>
             )}
@@ -98,22 +97,22 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
               {typeInfo.label}
             </Badge>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">{formatRelativeTime(item.createdAt)}</p>
+          <p className="text-xs text-slate-500 mt-0.5">{formatRelativeTime(item.createdAt)}</p>
         </div>
-        <button className="rounded p-1 text-slate-300 hover:text-slate-500 transition-colors">
+        <button className="rounded p-1 text-slate-600 hover:text-slate-400 transition-colors">
           <Bookmark className="h-4 w-4" />
         </button>
       </div>
 
       {/* Body */}
       <div className="px-4 pb-3">
-        <p className="text-sm leading-relaxed text-slate-800">{item.body}</p>
+        <p className="text-sm leading-relaxed text-slate-300">{item.body}</p>
 
         {/* Tags */}
         {item.tags && item.tags.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1">
             {item.tags.map((tag) => (
-              <span key={tag} className="text-xs font-medium text-brand-600 hover:text-brand-700 cursor-pointer">
+              <span key={tag} className="text-xs font-medium text-brand-400 hover:text-brand-300 cursor-pointer">
                 #{tag}
               </span>
             ))}
@@ -123,7 +122,7 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
 
       {/* Post image */}
       {item.imageUrl && (
-        <div className="mx-4 mb-3 overflow-hidden rounded-lg bg-slate-100">
+        <div className="mx-4 mb-3 overflow-hidden rounded-lg bg-white/5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={item.imageUrl}
@@ -146,14 +145,14 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
       ) : null}
 
       {/* Action bar */}
-      <div className="flex items-center gap-1 border-t border-slate-50 px-4 py-2.5">
+      <div className="flex items-center gap-1 border-t border-white/5 px-4 py-2.5">
         <button
           onClick={handleLike}
           className={cn(
             "flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors",
             liked
-              ? "text-rose-500 hover:bg-rose-50"
-              : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+              ? "text-rose-400 hover:bg-rose-500/10"
+              : "text-slate-500 hover:bg-white/8 hover:text-slate-300"
           )}
         >
           <Heart className={cn("h-4 w-4", liked && "fill-current")} />
@@ -165,8 +164,8 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
           className={cn(
             "flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors",
             showComments
-              ? "text-brand-600 hover:bg-brand-50"
-              : "text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+              ? "text-brand-400 hover:bg-brand-600/10"
+              : "text-slate-500 hover:bg-white/8 hover:text-slate-300"
           )}
         >
           <MessageCircle className="h-4 w-4" />
@@ -176,47 +175,47 @@ export function FeedCard({ item, onLike, userId }: FeedCardProps) {
         <div className="flex-1" />
 
         {item.cityId && (
-          <span className="flex items-center gap-1 text-xs text-slate-400">
+          <span className="flex items-center gap-1 text-xs text-slate-500">
             <MapPin className="h-3 w-3" />
             {item.cityId.toUpperCase()}
           </span>
         )}
 
-        <button className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
+        <button className="rounded-lg p-1.5 text-slate-500 hover:bg-white/8 hover:text-slate-300 transition-colors">
           <Share2 className="h-4 w-4" />
         </button>
       </div>
 
       {/* Comment section */}
       {showComments && (
-        <div className="border-t border-slate-50 px-4 py-3 space-y-3">
+        <div className="border-t border-white/5 px-4 py-3 space-y-3">
           {!commentsLoaded ? (
-            <p className="text-xs text-slate-400">Loading…</p>
+            <p className="text-xs text-slate-500">Loading…</p>
           ) : comments.length === 0 ? (
-            <p className="text-xs text-slate-400">No comments yet. Be the first!</p>
+            <p className="text-xs text-slate-500">No comments yet. Be the first!</p>
           ) : (
             <div className="space-y-2">
               {comments.map((c) => (
                 <div key={c.id} className="flex gap-2 text-sm">
-                  <span className="font-medium text-slate-800 shrink-0">{c.author_name}</span>
-                  <span className="text-slate-600">{c.body}</span>
+                  <span className="font-medium text-slate-200 shrink-0">{c.author_name}</span>
+                  <span className="text-slate-400">{c.body}</span>
                 </div>
               ))}
             </div>
           )}
           {userId && (
-            <div className="flex gap-2 items-center border border-slate-200 rounded-lg px-3 py-1.5">
+            <div className="flex gap-2 items-center border border-slate-700/50 rounded-lg bg-[#1a1a27] px-3 py-1.5">
               <input
                 value={commentInput}
                 onChange={(e) => setCommentInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleCommentSubmit(); } }}
                 placeholder="Add a comment…"
-                className="flex-1 text-sm bg-transparent focus:outline-none placeholder:text-slate-400"
+                className="flex-1 text-sm bg-transparent text-slate-200 focus:outline-none placeholder:text-slate-500"
               />
               <button
                 onClick={handleCommentSubmit}
                 disabled={!commentInput.trim() || submittingComment}
-                className="text-xs font-medium text-brand-600 disabled:text-slate-300 hover:text-brand-700 transition-colors"
+                className="text-xs font-medium text-brand-400 disabled:text-slate-600 hover:text-brand-300 transition-colors"
               >
                 {submittingComment ? "…" : "Post"}
               </button>

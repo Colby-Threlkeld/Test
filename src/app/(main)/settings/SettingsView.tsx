@@ -20,7 +20,7 @@ function Toggle({ enabled, onChange, label, description }: ToggleProps) {
   return (
     <div className="flex items-start justify-between gap-4 py-3">
       <div>
-        <p className="text-sm font-medium text-slate-800">{label}</p>
+        <p className="text-sm font-medium text-slate-200">{label}</p>
         {description && <p className="text-xs text-slate-500 mt-0.5">{description}</p>}
       </div>
       <button
@@ -29,7 +29,7 @@ function Toggle({ enabled, onChange, label, description }: ToggleProps) {
         onClick={() => onChange(!enabled)}
         className={cn(
           "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200",
-          enabled ? "bg-brand-600" : "bg-slate-200"
+          enabled ? "bg-brand-600" : "bg-white/15"
         )}
       >
         <span
@@ -86,9 +86,9 @@ export function SettingsView() {
 
     // Load notification/privacy prefs from localStorage
     try {
-      const savedNotifs = localStorage.getItem(`fanzone_notifs_${userId}`);
+      const savedNotifs = localStorage.getItem(`circa_notifs_${userId}`);
       if (savedNotifs) setNotificationsState(JSON.parse(savedNotifs));
-      const savedPrivacy = localStorage.getItem(`fanzone_privacy_${userId}`);
+      const savedPrivacy = localStorage.getItem(`circa_privacy_${userId}`);
       if (savedPrivacy) setPrivacy(JSON.parse(savedPrivacy));
     } catch {
       // ignore corrupt localStorage
@@ -98,13 +98,13 @@ export function SettingsView() {
   function handleNotifChange(key: keyof typeof notifications, v: boolean) {
     const next = { ...notifications, [key]: v };
     setNotificationsState(next);
-    if (userId) localStorage.setItem(`fanzone_notifs_${userId}`, JSON.stringify(next));
+    if (userId) localStorage.setItem(`circa_notifs_${userId}`, JSON.stringify(next));
   }
 
   function handlePrivacyChange(key: keyof typeof privacy, v: boolean) {
     const next = { ...privacy, [key]: v };
     setPrivacy(next);
-    if (userId) localStorage.setItem(`fanzone_privacy_${userId}`, JSON.stringify(next));
+    if (userId) localStorage.setItem(`circa_privacy_${userId}`, JSON.stringify(next));
   }
 
   async function handleSaveProfile() {
@@ -122,13 +122,13 @@ export function SettingsView() {
   return (
     <div className="mx-auto max-w-lg px-4 py-4">
       {/* Profile section */}
-      <section className="mb-6 rounded-xl border border-slate-100 bg-white p-5 shadow-card">
+      <section className="mb-6 rounded-xl border border-slate-700/40 bg-[#12121a] p-5 shadow-card">
         <SectionHeading><User className="h-3.5 w-3.5" /> Profile</SectionHeading>
 
         <div className="mt-4 flex items-center gap-4">
           <Avatar src={user?.image} name={user?.name ?? ""} size="xl" />
           <div>
-            <p className="text-base font-semibold text-slate-900">{displayName || user?.name}</p>
+            <p className="text-base font-semibold text-slate-100">{displayName || user?.name}</p>
             <p className="text-sm text-slate-500">{user?.email}</p>
           </div>
         </div>
@@ -148,13 +148,13 @@ export function SettingsView() {
             placeholder="you@example.com"
           />
           <div>
-            <label className="text-sm font-medium text-slate-700">Bio</label>
+            <label className="text-sm font-medium text-slate-300">Bio</label>
             <textarea
               rows={2}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               placeholder="Tell other fans a bit about you…"
-              className="mt-1.5 w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+              className="mt-1.5 w-full resize-none rounded-lg border border-slate-700/50 bg-[#1a1a27] px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
             />
           </div>
         </div>
@@ -177,9 +177,9 @@ export function SettingsView() {
       </section>
 
       {/* Notification preferences */}
-      <section className="mb-6 rounded-xl border border-slate-100 bg-white p-5 shadow-card">
+      <section className="mb-6 rounded-xl border border-slate-700/40 bg-[#12121a] p-5 shadow-card">
         <SectionHeading><Bell className="h-3.5 w-3.5" /> Notifications</SectionHeading>
-        <div className="mt-2 divide-y divide-slate-50">
+        <div className="mt-2 divide-y divide-white/5">
           <Toggle
             label="Direct messages"
             description="When someone sends you a message"
@@ -200,7 +200,7 @@ export function SettingsView() {
           />
           <Toggle
             label="Marketing & updates"
-            description="New features and FanZone announcements"
+            description="New features and Circa announcements"
             enabled={notifications.marketing}
             onChange={(v) => handleNotifChange("marketing", v)}
           />
@@ -208,9 +208,9 @@ export function SettingsView() {
       </section>
 
       {/* Privacy */}
-      <section className="mb-6 rounded-xl border border-slate-100 bg-white p-5 shadow-card">
+      <section className="mb-6 rounded-xl border border-slate-700/40 bg-[#12121a] p-5 shadow-card">
         <SectionHeading><Lock className="h-3.5 w-3.5" /> Privacy</SectionHeading>
-        <div className="mt-2 divide-y divide-slate-50">
+        <div className="mt-2 divide-y divide-white/5">
           <Toggle
             label="Public profile"
             description="Anyone can view your profile and posts"
@@ -233,7 +233,7 @@ export function SettingsView() {
       </section>
 
       {/* App preferences */}
-      <section className="mb-6 rounded-xl border border-slate-100 bg-white p-5 shadow-card">
+      <section className="mb-6 rounded-xl border border-slate-700/40 bg-[#12121a] p-5 shadow-card">
         <SectionHeading><Palette className="h-3.5 w-3.5" /> Preferences</SectionHeading>
         <div className="mt-3 space-y-1">
           {[
@@ -243,9 +243,9 @@ export function SettingsView() {
           ].map(({ label, value }) => (
             <button
               key={label}
-              className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm hover:bg-slate-50 transition-colors"
+              className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm hover:bg-white/5 transition-colors"
             >
-              <span className="text-slate-700">{label}</span>
+              <span className="text-slate-300">{label}</span>
               <span className="flex items-center gap-1 text-slate-500">
                 {value}
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -256,20 +256,20 @@ export function SettingsView() {
       </section>
 
       {/* Danger zone */}
-      <section className="rounded-xl border border-slate-100 bg-white p-5 shadow-card">
+      <section className="rounded-xl border border-slate-700/40 bg-[#12121a] p-5 shadow-card">
         <div className="flex flex-col gap-2">
-          <Button variant="ghost" className="w-full justify-start text-slate-600">
+          <Button variant="ghost" className="w-full justify-start text-slate-400">
             Change password
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start text-red-500 hover:bg-red-50"
+            className="w-full justify-start text-red-400 hover:bg-red-500/10"
             onClick={signOut}
           >
             <LogOut className="mr-2 h-4 w-4" />
             Sign out
           </Button>
-          <Button variant="ghost" className="w-full justify-start text-red-400 hover:bg-red-50 text-sm">
+          <Button variant="ghost" className="w-full justify-start text-red-500/60 hover:bg-red-500/10 text-sm">
             Delete account
           </Button>
         </div>

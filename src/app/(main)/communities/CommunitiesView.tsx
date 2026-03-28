@@ -77,7 +77,7 @@ export function CommunitiesView() {
         <CommunityFilters onSearch={setQuery} onFilter={setActiveFilter} activeFilter={activeFilter} />
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="h-36 rounded-xl bg-slate-100 animate-pulse" />
+            <div key={n} className="h-36 rounded-xl bg-white/5 animate-pulse" />
           ))}
         </div>
       </div>
@@ -96,7 +96,7 @@ export function CommunitiesView() {
       {/* Joined */}
       {joined.length > 0 && (
         <section className="mt-6">
-          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
+          <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-300">
             <Users className="h-4 w-4 text-brand-400" /> Your communities
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -113,10 +113,10 @@ export function CommunitiesView() {
 
       {/* Discover */}
       <section className="mt-6">
-        <h2 className="mb-3 text-sm font-semibold text-slate-700">Discover</h2>
+        <h2 className="mb-3 text-sm font-semibold text-slate-300">Discover</h2>
         {filtered(discover).length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 py-12 text-center">
-            <Users className="h-8 w-8 text-slate-300" />
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700/50 py-12 text-center">
+            <Users className="h-8 w-8 text-slate-600" />
             <p className="mt-2 text-sm text-slate-500">No communities match your search.</p>
           </div>
         ) : (

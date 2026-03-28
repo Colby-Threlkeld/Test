@@ -42,14 +42,14 @@ function LoginForm() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Welcome back</h1>
+        <h1 className="text-2xl font-bold text-slate-100">Welcome back</h1>
         <p className="mt-1 text-sm text-slate-500">Sign in to connect with fans around the world.</p>
       </div>
 
       {error && (
-        <div className="flex items-start gap-2.5 rounded-lg border border-red-100 bg-red-50 p-3">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="flex items-start gap-2.5 rounded-lg border border-red-500/20 bg-red-500/10 p-3">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+          <p className="text-sm text-red-400">{error}</p>
         </div>
       )}
 
@@ -77,7 +77,7 @@ function LoginForm() {
             required
           />
           <div className="mt-1.5 text-right">
-            <Link href="#" className="text-xs text-brand-600 hover:text-brand-700">
+            <Link href="#" className="text-xs text-brand-400 hover:text-brand-300">
               Forgot password?
             </Link>
           </div>
@@ -89,17 +89,17 @@ function LoginForm() {
       </form>
 
       {/* Demo hint */}
-      <div className="rounded-lg border border-slate-100 bg-slate-50 p-3">
-        <p className="text-xs font-medium text-slate-600">Quick demo access</p>
+      <div className="rounded-lg border border-slate-700/50 bg-white/5 p-3">
+        <p className="text-xs font-medium text-slate-400">Quick demo access</p>
         <p className="mt-0.5 text-xs text-slate-500">
-          Email: <code className="font-mono">demo@fanzone.app</code><br />
+          Email: <code className="font-mono">demo@circa.app</code><br />
           Password: <code className="font-mono">demo</code>
         </p>
       </div>
 
       <p className="text-center text-sm text-slate-500">
         Don't have an account?{" "}
-        <Link href="/signup" className="font-medium text-brand-600 hover:text-brand-700">
+        <Link href="/signup" className="font-medium text-brand-400 hover:text-brand-300">
           Sign up
         </Link>
       </p>

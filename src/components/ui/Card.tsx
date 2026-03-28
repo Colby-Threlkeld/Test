@@ -18,7 +18,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(
-        "rounded-xl border border-slate-100 bg-white shadow-card",
+        "rounded-xl border border-slate-700/40 bg-[#12121a] shadow-card",
         hover && "cursor-pointer transition-shadow duration-150 hover:shadow-card-hover",
         paddingMap[padding],
         className
@@ -36,11 +36,11 @@ export function CardHeader({ className, ...props }: HTMLAttributes<HTMLDivElemen
 }
 
 export function CardTitle({ className, ...props }: HTMLAttributes<HTMLHeadingElement>) {
-  return <h3 className={cn("text-base font-semibold text-slate-900 leading-tight", className)} {...props} />;
+  return <h3 className={cn("text-base font-semibold text-slate-100 leading-tight", className)} {...props} />;
 }
 
 export function CardBody({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("text-sm text-slate-700", className)} {...props} />;
+  return <div className={cn("text-sm text-slate-300", className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {

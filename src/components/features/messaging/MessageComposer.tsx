@@ -34,14 +34,14 @@ export function MessageComposer({
   }
 
   return (
-    <div className="border-t border-slate-100 bg-white px-4 py-3">
+    <div className="border-t border-slate-700/40 bg-[#0d0d15] px-4 py-3">
       {showVoice && (
         <div className="mb-3">
           <VoiceTranslator onTranslated={(text) => setValue(text)} />
         </div>
       )}
-      <div className="flex items-end gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 focus-within:border-brand-400 focus-within:ring-2 focus-within:ring-brand-400/20 transition-all">
-        <button className="mb-1 shrink-0 rounded-lg p-1 text-slate-400 hover:text-slate-600 transition-colors">
+      <div className="flex items-end gap-2 rounded-xl border border-slate-700/50 bg-[#1a1a27] px-3 py-2 focus-within:border-brand-500/50 focus-within:ring-2 focus-within:ring-brand-500/20 transition-all">
+        <button className="mb-1 shrink-0 rounded-lg p-1 text-slate-500 hover:text-slate-300 transition-colors">
           <Paperclip className="h-4 w-4" />
         </button>
 
@@ -49,7 +49,7 @@ export function MessageComposer({
           onClick={() => setShowVoice((v) => !v)}
           className={cn(
             "mb-1 shrink-0 rounded-lg p-1 transition-colors",
-            showVoice ? "text-brand-600 hover:text-brand-700" : "text-slate-400 hover:text-slate-600"
+            showVoice ? "text-brand-400 hover:text-brand-300" : "text-slate-500 hover:text-slate-300"
           )}
         >
           <Mic className="h-4 w-4" />
@@ -63,7 +63,7 @@ export function MessageComposer({
           placeholder={placeholder}
           rows={1}
           className={cn(
-            "flex-1 resize-none bg-transparent text-sm text-slate-900 placeholder:text-slate-400",
+            "flex-1 resize-none bg-transparent text-sm text-slate-100 placeholder:text-slate-500",
             "focus:outline-none min-h-[24px] max-h-32 overflow-y-auto",
             "disabled:cursor-not-allowed"
           )}
@@ -75,7 +75,7 @@ export function MessageComposer({
           }}
         />
 
-        <button className="mb-1 shrink-0 rounded-lg p-1 text-slate-400 hover:text-slate-600 transition-colors">
+        <button className="mb-1 shrink-0 rounded-lg p-1 text-slate-500 hover:text-slate-300 transition-colors">
           <Smile className="h-4 w-4" />
         </button>
 
@@ -85,14 +85,14 @@ export function MessageComposer({
           className={cn(
             "mb-1 shrink-0 flex h-7 w-7 items-center justify-center rounded-lg transition-colors",
             value.trim()
-              ? "bg-brand-600 text-white hover:bg-brand-700"
-              : "text-slate-300 cursor-not-allowed"
+              ? "bg-brand-600 text-white hover:bg-brand-500"
+              : "text-slate-600 cursor-not-allowed"
           )}
         >
           <Send className="h-3.5 w-3.5" />
         </button>
       </div>
-      <p className="mt-1.5 text-center text-[10px] text-slate-300">
+      <p className="mt-1.5 text-center text-[10px] text-slate-600">
         Enter to send · Shift+Enter for new line
       </p>
     </div>
